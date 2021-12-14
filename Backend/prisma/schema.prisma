@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comment {
+  id_comment Int      @id @default(autoincrement())
+  date       DateTime @db.Date
+  content    String   @db.Text
+  fk_user    Int
+  fk_post    Int
+  post       post     @relation(fields: [fk_post], references: [id_post], onDelete: Cascade, map: "comment_FK_1")
+  user       user     @relation(fields: [fk_user], references: [id_user], onDelete: Cascade, map: "comment_FK")
+
+  @@index([fk_user], map: "comment_FK")
+  @@index([fk_post], map: "comment_FK_1")
+}
+
+model post {
+  id_post Int       @id @default(autoincrement())
+  date    DateTime  @db.Date
+  content String    @db.Text
+  title   String    @db.VarChar(100)
+  fk_user Int
+  user    user      @relation(fields: [fk_user], references: [id_user], onDelete: Cascade, map: "post_FK")
+  comment comment[]
+
+  @@index([fk_user], map: "post_FK")
+}
+
+model user {
+  id_user       Int       @id @default(autoincrement())
+  email         String    @unique(map: "email") @db.VarChar(100)
+  user_password String    @db.VarChar(100)
+  firstname     String    @db.VarChar(100)
+  lastname      String    @db.VarChar(100)
+  comment       comment[]
+  post          post[]
+  role          Role      @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
