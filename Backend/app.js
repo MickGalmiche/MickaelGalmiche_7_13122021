@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const express = require('express');
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 const prisma = new PrismaClient();
 const app = express();
@@ -19,5 +21,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/auth', userRoutes);
+app.use('/api/post', postRoutes);
+app.use('/api/comment', commentRoutes);
 
 module.exports = app;
