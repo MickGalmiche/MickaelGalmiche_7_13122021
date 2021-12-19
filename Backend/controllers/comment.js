@@ -7,12 +7,9 @@ const prisma = new PrismaClient({
     },
 });
 
-exports.getAllPost = async (req, res) => {
+exports.getAllComment = async (req, res) => {
     try {
-        const posts = await prisma.post.findMany({
-            orderBy: {
-                id_post: 'desc',
-            },
+        const comments = await prisma.comment.findMany({
             include: {
                 user: {
                     select: {
@@ -23,68 +20,69 @@ exports.getAllPost = async (req, res) => {
                 }
             }
         })
-        return res.status(200).json(posts);
-    } catch (error) {
-        return res.status(404).json({ error: 'Posts not found in database' })
+        return res.status(200).json(comments);
+    } catch {
+        return res.status(404).json({ error: 'Comments not found in database' })
     }
 }
 
-exports.createPost = async (req, res) => {
-    const { title, content, authorId } = req.body
+exports.createComment = async (req, res) => {
+    const { content, authorId, postId } = req.body
     const { userId } = req.token
 
-    if(authorId == userId) {
+    if (authorId == userId) {
         try {
-            const post = await prisma.post.create({
+            const comment = await prisma.comment.create({
                 data: {
-                    title,
                     content,
                     fk_user: authorId,
+                    fk_post: postId,
                 }
             })
-            return res.status(201).json({ message: 'Post added!' })
+            return res.status(201).json({ message: 'Comment added' })
         } catch (error) {
-            return res.status(400).json({ error: 'Post not added' })
+            return res.status(400).json({ error: 'Comment not added' })
         }
     } else {
         return res.status(403).json({ error: 'Permission required' })
     }
 }
 
-exports.getOnePost = async (req, res) => {
+exports.getOneComment = async (req, res) => {
     const { id } = req.params
 
     try {
-        const post = await prisma.post.findUnique({
+        const comment = await prisma.comment.findUnique({
             where: {
-                id_post: Number(id),
+                id_comment: Number(id),
             },
             include: {
                 user: {
                     select: {
-                        id_user: true,
+                        id_user:true,
                         firstname: true,
                         lastname: true,
                     }
                 },
-                comment: {
+                post: {
                     select: {
-                        id_comment: true,
+                        id_post: true,
                         date: true,
-                        content: true
+                        title: true,
+                        content: true,
                     }
                 }
             }
         })
-        return res.status(200).json(post);
+        return res.status(200).json(comment)
     } catch (error) {
-        return res.status(404).json({ error: 'Post not found in database' })
+        return res.status(404).json({ error: 'Comment not found in database'})
     }
 }
 
-exports.modifyPost = async (req, res) => {
+exports.modifyComment = async (req, res) => {
     const { id } = req.params
-    const { title, content } = req.body
+    const { content } = req.body
     const { userId } = req.token
 
     try {
@@ -93,31 +91,30 @@ exports.modifyPost = async (req, res) => {
                 id_user: Number(userId),
             },
         })
-        const post = await prisma.post.findUnique({
+        const comment = await prisma.comment.findUnique({
             where: {
-                id_post: Number(id)
+                id_comment: Number(id)
             },
         })
-        if (post.fk_user == userId || user.role === 'ADMIN') {
-            const updatedPost = await prisma.post.update({
+        if (comment.fk_user == userId || user.role === 'ADMIN') {
+            const updatedComment = await prisma.comment.update({
                 where: {
-                    id_post: Number(id),
+                    id_comment: Number(id),
                 },
                 data: {
-                    title,
                     content,
                 }
             })
-            return res.status(201).json({ message: 'Post updated ! ' })
+            return res.status(201).json({ message: 'Comment updated ! ' })
         } else {
             res.status(403).json({ error: 'Permission required' });
         }
     } catch (error) {
-        res.status(400).json({ error: 'Post not updated' });
+        res.status(400).json({ error: 'Comment not updated' });
     }
 }
 
-exports.deletePost = async (req, res) => {
+exports.deleteComment = async (req, res) => {
     const { id } = req.params
     const { userId } = req.token
 
@@ -127,24 +124,23 @@ exports.deletePost = async (req, res) => {
                 id_user: Number(userId),
             },
         })
-        const post = await prisma.post.findUnique({
+        const comment = await prisma.comment.findUnique({
             where: {
-                id_post: Number(id)
+                id_comment: Number(id)
             },
         })
-        
-        if (post.fk_user == userId || user.role === 'ADMIN') {
-            const deletedPost = await prisma.post.delete({
+
+        if (comment.fk_user == userId || user.role === 'ADMIN') {
+            const deletedComment = await prisma.comment.delete({
                 where: {
-                    id_post: Number(id),
+                    id_comment: Number(id),
                 }
             })
-            return res.status(201).json({ message: 'Post removed! '})
+            return res.status(201).json({ message: 'Comment removed' })
         } else {
-            res.status(403).json({ error: 'Permission required' })
+            return res.status(403).json({ error: 'Permission required' })
         }
-
     } catch (error) {
-        res.status(400).json({ error: 'Post not removed' });
+        return res.status(400).json({ error: 'Comment not removed' })
     }
 }

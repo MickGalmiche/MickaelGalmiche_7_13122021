@@ -14,3 +14,12 @@
 |GET|/api/post/:id| - |Single post|
 |PUT|/api/post/:id|{ title: string, content: string }|{ message: string }|
 |DELETE|/api/post/:id| - |{ message: string }|
+
+### Comment
+|   |Access point|Request Body|Response|
+|---|---|---|---|
+|GET|/api/comment| - |Array of Comments|
+|POST|/api/comment|{ content: string, authorId: string, postId: string }|{ message: string }|
+|GET|/api/comment/:id| - |Single comment|
+|PUT|/api/comment/:id|{ content: string }|{ message: string }|
+|DELETE|/api/comment/:id| - |{ message: string }|
