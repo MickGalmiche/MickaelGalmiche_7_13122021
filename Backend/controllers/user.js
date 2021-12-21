@@ -8,7 +8,7 @@ const prisma = new PrismaClient({
     },
 });
 
-exports.signup = async (req, res, next) => {
+exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(req.body.password, 10)
 
     const user = await prisma.user.create({
@@ -25,7 +25,7 @@ exports.signup = async (req, res, next) => {
             message: "Utilisateur non créé !" }))
 }
 
-exports.login = async (req, res, next) => {
+exports.login = async (req, res) => {
     async function validPassword(req, user) {
         return await bcrypt.compare(req.body.password, user.user_password);
     }
@@ -51,5 +51,31 @@ exports.login = async (req, res, next) => {
         }
     } catch (error) {
         return res.status(404).json({ error: 'Utilisateur non trouvé !' })
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    const { id } = req.params
+    const { userId } = req.token
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id_user: Number(userId),
+            }
+        })
+
+        if (id == userId || user.role === 'ADMIN') {
+            const deletedUser = await prisma.user.delete({
+                where: {
+                    id_user: Number(id),
+                }
+            })
+            return res.status(201).json({ message: 'User removed' })
+        } else {
+            res.status(403).json({ error: 'Permission required' })
+        }
+    } catch (error) {
+        res.status(400).json({ error: 'User not removed '});
     }
 }

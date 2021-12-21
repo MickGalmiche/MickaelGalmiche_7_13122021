@@ -3,8 +3,9 @@
 ### User
 |   |Access point|Request Body|Response|
 |---|---|---|---|
-|POST|/api/user/signup|{ email: string, firstname: string, lastname: string, password: string}|{ message: string }|
-|POST|/api/user/login|{ email: string, password: string }|{ userId: string, token: string }|
+|POST|/api/auth/signup|{ email: string, firstname: string, lastname: string, password: string}|{ message: string }|
+|POST|/api/auth/login|{ email: string, password: string }|{ userId: string, token: string }|
+|DELETE|/api/auth/delete/:id| - |{ message: string}|
 
 ### Post
 |   |Access point|Request Body|Response|
