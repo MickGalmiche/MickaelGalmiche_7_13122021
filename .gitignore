@@ -1,3 +1,4 @@
 groupomania.code-workspace
 Backend/.env
+Backend/prisma/migrations/
 node_modules

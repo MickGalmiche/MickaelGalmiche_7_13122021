@@ -9,7 +9,7 @@ datasource db {
 
 model comment {
   id_comment Int      @id @default(autoincrement())
-  date       DateTime @db.Date
+  date       DateTime @db.Timestamp @default(now())
   content    String   @db.Text
   fk_user    Int
   fk_post    Int
@@ -22,7 +22,7 @@ model comment {
 
 model post {
   id_post Int       @id @default(autoincrement())
-  date    DateTime  @db.Date
+  date    DateTime  @db.Timestamp @default(now())
   content String    @db.Text
   title   String    @db.VarChar(100)
   fk_user Int
