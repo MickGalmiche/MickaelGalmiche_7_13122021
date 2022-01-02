@@ -3,17 +3,34 @@
     <NavMenu/>
   </header>
   <main>
-    <router-view/>
+    <router-view v-if="accessToken"/>
+    <Login v-else />
   </main>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 import NavMenu from '@/components/NavMenu.vue'
+import Login from '@/components/Login.vue'
 
 export default {
   name: 'app',
   components: {
-    NavMenu
+    NavMenu,
+    Login
+  },
+  computed: {
+    ...mapState([
+      'accessToken'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'fetchAccessToken'
+    ]),
+  },
+  created() {
+    this.fetchAccessToken();
   }
 }
 </script>
