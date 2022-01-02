@@ -43,7 +43,7 @@ export default {
       lastname: {
           type: String
       },
-      getLink : {
+      getLink: {
           type: Boolean
       }
   },
@@ -69,32 +69,33 @@ export default {
 <style lang="scss">
     .post-item {
         margin: 20px 0;
-
-        a {
-            text-decoration: none;
-            color: gray;
+        .post-card {
+            box-shadow: 10px 25px 50px -12px rgba(0,0,0,0.25);
+            &:hover {
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 5px rgba(60,64,67,0.15);
+            }
         }
     }
 
     .post-card {
+        color: gray;
         border: 1px solid gainsboro;
         border-radius: 10px;
         background-color: white;
         padding: 20px;
         width: 500px;
         overflow: hidden;
-        box-shadow: 10px 25px 50px -12px rgba(0,0,0,0.25);
+
         &__title {
             color: black;
         }
-
         &__caption {
             font-size: .8rem;
             color: lightgray;
         }
+    }
 
-        &:hover {
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 5px rgba(60,64,67,0.15);
-        }
+    a {
+        text-decoration: none;
     }
 </style>
