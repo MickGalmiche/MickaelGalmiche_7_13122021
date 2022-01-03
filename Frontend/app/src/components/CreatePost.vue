@@ -1,5 +1,5 @@
 <template>
-    <section class="add-post">
+    <article class="add-post">
         <form @submit.prevent="postSubmit">
 
             <input type="text" v-model="title" placeholder="Titre" required>
@@ -8,7 +8,7 @@
             <button type="submit">Envoyer</button>
         </form>
 
-    </section>
+    </article>
 </template>
 
 <script>

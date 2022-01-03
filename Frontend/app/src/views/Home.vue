@@ -1,5 +1,11 @@
 <template>
+  <section>
+    <h2>Ajouter un post</h2>
+    <CreatePost />
+  </section>
+
   <section id="home">
+    <h2>Timeline</h2>
     <PostItem
       v-for="post in posts"
       :key="post.id_post"
@@ -18,11 +24,13 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 import PostItem from '@/components/PostItem.vue'
+import CreatePost from '@/components/CreatePost.vue'
 
 export default {
   name: 'Home',
   components: {
-    PostItem
+    PostItem,
+    CreatePost
   },
   data() {
     return {
@@ -31,7 +39,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'accessToken'
+      'accessToken',
+      'userId'
     ])
   },
   methods: {
@@ -54,9 +63,17 @@ export default {
 
 <style lang="scss" scoped>
   section {
-    background-color: whitesmoke;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+  }
+
+  .add-post {
+    background-color: whitesmoke;
+    margin: 20px 0;
+  }
+
+  .home {
+    background-color: ghostwhite;
   }
 </style>
