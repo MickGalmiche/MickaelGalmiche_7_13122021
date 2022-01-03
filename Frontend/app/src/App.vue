@@ -21,7 +21,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'accessToken'
+      'accessToken',
+      'userId'
     ])
   },
   methods: {
