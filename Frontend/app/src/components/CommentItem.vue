@@ -1,6 +1,6 @@
 <template>
     <article class="comment-card">
-        <p class="comment-card__caption">Publié {{ relativeDate }}</p>
+        <p class="comment-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ relativeDate }}</p>
         <p class="comment-card__content">{{ content }}</p>
     </article>
 </template>
@@ -21,6 +21,12 @@ export default {
       },
       date: {},
       content: {
+          type: String
+      },
+      firstname: {
+          type: String
+      },
+      lastname: {
           type: String
       }
   },

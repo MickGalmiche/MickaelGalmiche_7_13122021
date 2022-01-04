@@ -21,6 +21,8 @@
         :date="comment.date"
         :content="comment.content"
         :commentId="comment.id_comment"
+        :firstname="comment.user.firstname"
+        :lastname="comment.user.lastname"
       /> 
     </div>
     <p v-else>Aucun commentaire</p>
@@ -48,7 +50,9 @@ export default {
   },
   computed: {
     ...mapState([
-      'accessToken'
+      'accessToken',
+      'userId',
+      'userRole'
     ]),
     routeId() {
       return this.$route.params.id
