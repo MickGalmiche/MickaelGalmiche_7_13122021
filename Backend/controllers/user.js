@@ -9,13 +9,14 @@ const prisma = new PrismaClient({
 });
 
 exports.signup = async (req, res) => {
-    const hash = await bcrypt.hash(req.body.password, 10)
+    const { email, firstname, lastname, password } = req.body
+    const hash = await bcrypt.hash(password, 10)
 
     const user = await prisma.user.create({
         data: {
-            email: req.body.email,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
+            email,
+            firstname,
+            lastname,
             user_password: hash
         }
     })
@@ -40,6 +41,7 @@ exports.login = async (req, res) => {
         if (valid) {
             res.status(200).json({
                 userId: user.id_user,
+                userRole: user.role,
                 token: jsonToken.sign(
                     { userId: user.id_user },
                     process.env.TOKEN_KEY,

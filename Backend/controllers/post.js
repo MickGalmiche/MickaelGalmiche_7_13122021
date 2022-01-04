@@ -71,7 +71,15 @@ exports.getOnePost = async (req, res) => {
                     select: {
                         id_comment: true,
                         date: true,
-                        content: true
+                        content: true,
+                        user: {
+                            select: {
+                                id_user: true,
+                                firstname: true,
+                                lastname: true,
+                                user_password: false
+                            }
+                        }
                     }
                 }
             }
