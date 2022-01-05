@@ -25,7 +25,8 @@ export default {
   computed: {
     ...mapState([
       'accessToken',
-      'userId'
+      'userId',
+      'userRole'
     ])
   },
     methods: {
@@ -40,7 +41,7 @@ export default {
                 },
             })
             .then(() => {
-                this.$router.push({ name: 'Home' })
+                this.$emit('submitPost')
             })
             .catch(error => console.error(error))
         }

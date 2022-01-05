@@ -6,9 +6,11 @@
       :date="post.date"
       :content="post.content"
       :postId="post.id_post"
+      :authorId="user.id_user"
       :firstname="user.firstname"
       :lastname="user.lastname"
       :getLink="false"
+      @deletePost="redirectAtHome()"
     />
   </section>
 
@@ -21,12 +23,15 @@
         :date="comment.date"
         :content="comment.content"
         :commentId="comment.id_comment"
+        :authorId="comment.user.id_user"
         :firstname="comment.user.firstname"
         :lastname="comment.user.lastname"
+        @deleteComment="fetchPost()"
       /> 
     </div>
     <p v-else>Aucun commentaire</p>
   </section>
+
 </template>
 
 <script>
@@ -75,6 +80,9 @@ export default {
           this.comments = response.data.comment
           ))
         .catch(error => console.error(error))
+    },
+    redirectAtHome() {
+      this.$router.push({ name: 'Home' })
     }
   },
   mounted() {
@@ -84,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-section {
+  section {
     background-color: whitesmoke;
     display: flex;
     flex-flow: column nowrap;

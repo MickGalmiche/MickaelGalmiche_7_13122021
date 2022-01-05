@@ -1,7 +1,9 @@
 <template>
-  <section>
+  <section class="add-post">
     <h2>Ajouter un post</h2>
-    <CreatePost />
+    <CreatePost 
+      @submitPost="fetchPosts()"
+    />
   </section>
 
   <section id="home">
@@ -13,9 +15,11 @@
       :date="post.date"
       :content="post.content"
       :postId="post.id_post"
+      :authorId="post.user.id_user"
       :firstname="post.user.firstname"
       :lastname="post.user.lastname"
       :getLink="true"
+      @deletePost="fetchPosts()"
     />
   </section>
 </template>
@@ -40,7 +44,8 @@ export default {
   computed: {
     ...mapState([
       'accessToken',
-      'userId'
+      'userId',
+      'userRole'
     ])
   },
   methods: {
@@ -71,9 +76,5 @@ export default {
   .add-post {
     background-color: whitesmoke;
     margin: 20px 0;
-  }
-
-  .home {
-    background-color: ghostwhite;
   }
 </style>

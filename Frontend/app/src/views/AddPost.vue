@@ -1,7 +1,9 @@
 <template>
     <section>
         <h2>Ajouter un post</h2>
-        <CreatePost />
+        <CreatePost 
+          @submitPost="redirectAtHome()"
+        />
     </section>
 </template>
 
@@ -19,6 +21,11 @@ export default {
       'accessToken',
       'userId'
     ])
+  },
+  methods: {
+    redirectAtHome() {
+      this.$router.push({ name: 'Home' })
+    }
   }
 }
 </script>

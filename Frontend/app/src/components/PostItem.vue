@@ -5,6 +5,9 @@
                 <h2 class="post-card__title">{{ title }}</h2>
                 <p class="post-card__caption">Publié par {{ firstname }} {{ lastname }},il y a {{ relativeDate }}</p>
                 <p class="post-card__content">{{ content }}</p>
+                <div v-if="isAdmin || isAuthor">
+                  <button @click.prevent="deletePost">Supprimer</button>
+                </div>
             </article>
         </router-link>
     </div>
@@ -13,10 +16,16 @@
         <h2 class="post-card__title">{{ title }}</h2>
         <p class="post-card__caption">Publié par {{ firstname }} {{ lastname }},il y a {{ relativeDate }}</p>
         <p class="post-card__content">{{ content }}</p>
+        <div v-if="isAdmin || isAuthor">
+          <button @click.prevent="deletePost">Supprimer</button>
+        </div>
+    <div v-else>...</div>
     </article>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import axios from 'axios'
 import moment from 'moment'
 
 export default {
@@ -26,6 +35,19 @@ export default {
       calendarDate: "",  
       formattedDate: ""
   }),
+  computed: {
+    ...mapState([
+      'accessToken',
+      'userId',
+      'userRole'
+    ]),
+    isAuthor() {
+      return this.userId == this.authorId ? true : false;
+    },
+    isAdmin() {
+      return this.userRole == 'ADMIN' ? true : false;
+    }
+  },
   props: {
       postId: {
           type: Number
@@ -39,6 +61,9 @@ export default {
       },
       firstname: {
           type: String
+      },
+      authorId: {
+          type: Number
       },
       lastname: {
           type: String
@@ -56,6 +81,18 @@ export default {
       },
       getFormattedDate() {
           return moment(this.date).format('LLLL')
+      },
+      deletePost() {
+        axios
+          .delete(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+            headers: {
+              'Authorization': `Bearer ${this.accessToken}`
+              }
+            })
+          .then(() => {
+            this.$emit('deletePost')
+          })
+          .catch(error => console.error(error))
       }
   },
   mounted() {
