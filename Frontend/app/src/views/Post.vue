@@ -32,6 +32,12 @@
     <p v-else>Aucun commentaire</p>
   </section>
 
+  <section>
+    <AddComment 
+      :postId="post.id_post"
+      @submitComment="fetchPost()"
+    />
+  </section>
 </template>
 
 <script>
@@ -39,12 +45,14 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 import PostItem from '@/components/PostItem.vue'
 import CommentItem from '@/components/CommentItem.vue'
+import AddComment from '@/components/CreateComment.vue'
 
 export default {
   name: 'Post',
   components: {
     PostItem,
-    CommentItem
+    CommentItem,
+    AddComment
   },
   data() {
     return {
