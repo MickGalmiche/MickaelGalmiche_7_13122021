@@ -52,6 +52,15 @@ export default createStore({
       commit('updateAccessToken', localStorage.getItem('accessToken'));
       commit('updateUserId', localStorage.getItem('userId'));
       commit('updateUserRole', localStorage.getItem('userRole'));
+    },
+    doLogout({ commit }) {
+      commit('loginStop', null);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+      commit('updateAccessToken', null);
+      commit('updateUserId', null);
+      commit('updateUserRole', null);
     }
   },
   modules: {

@@ -1,15 +1,37 @@
 <template>
     <nav id="navMenu">
         <router-link :to="{ name: 'Home' }"><img src="@/assets/logo/icon-left-font.svg" alt="Groupomania Logo"></router-link>
-        <ul>
+        <ul v-if="accessToken">
+            <li><router-link :to="{ name: 'AddPost' }">Ajouter un article</router-link></li>
+            <li><a @click.prevent="logout">Se déconnecter</a></li>
+        </ul>
+
+        <ul v-else>
             <li><router-link :to="{ name: 'About' }">About</router-link></li>
         </ul>
     </nav>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
-    name: 'navMenu'
+    name: 'navMenu',
+    computed: {
+        ...mapState([
+          'accessToken',
+          'userId',
+          'userRole'
+        ])
+    },
+    methods: {
+        ...mapActions([
+            'doLogout'
+        ]),
+        logout() {
+            this.doLogout()
+        }
+    }
 }
 </script>
 
@@ -29,6 +51,7 @@ export default {
         a {
             font-weight: bold;
             color: #2c3e50;
+            cursor: pointer;
 
             &.router-link-exact-active {
               color: #42b983;
@@ -37,6 +60,12 @@ export default {
 
         ul {
             list-style: none;
+            display: flex;
+            margin: 0;
+
+            li {
+                margin: 0 10px;
+            }
         }
     }
 </style>
