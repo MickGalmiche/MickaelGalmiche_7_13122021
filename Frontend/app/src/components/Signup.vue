@@ -1,14 +1,14 @@
 <template>
-    <section class="register">
-        <form @submit.prevent="registerSubmit">
-            <input type="text" v-model="firstname" placeholder="firstname">
-            <input type="text" v-model="lastname" placeholder="lastname">
-            <input type="email" v-model="email" placeholder="Email">
-            <input type="password" v-model="password" placeholder="Mot de passe">
-            <button type="submit">S'enregistrer</button>
+    <article class="signup">
+        <form class="signup__form signup-form" @submit.prevent="registerSubmit">
+            <input class="signup-form__item" type="text" v-model="lastname" placeholder="Nom" required>
+            <input class="signup-form__item" type="text" v-model="firstname" placeholder="Prénom" required>
+            <input class="signup-form__item" type="email" v-model="email" placeholder="Email" required>
+            <input class="signup-form__item" type="password" v-model="password" placeholder="Mot de passe" required>
+            <button class="signup-form__button" type="submit">S'inscrire</button>
         </form>
 
-    </section>
+    </article>
 </template>
 
 <script>
@@ -53,22 +53,42 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-    .register {
-        width: 250px;
+<style lang="scss">
 
-        form {
-            display: flex;
-            flex-direction: column;
+    .signup-form {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
 
-            input {
-                padding: .5rem
+        &__item {
+            padding: .5rem;
+            margin: 10px 0;
+            border:1px solid transparent;
+            border-radius: 5px;
+            background-color: whitesmoke;
+            outline: none;
+
+            &:focus {
+                background-color: #FFD7D7;
+                border: 1px solid #FD2D01;
             }
+        }
+        &__button {
+            align-self: center;
+            max-width: 100px;
+            padding: .5rem;
+            margin: 10px 0;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            background-color: #666;
+            color: white;
+            font-weight: bold;
 
-            button {
-                padding: .5rem;
-
-                cursor: pointer;
+            &:hover {
+                box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
+                background-color: #FD2D01;
+                color: white;
             }
         }
     }
