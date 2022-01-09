@@ -5,6 +5,11 @@
             <h3 class="post-card__title">{{ title }}</h3>
             <p class="post-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ calendarDate }}</p>
             <p class="post-card__content">{{ content }}</p>
+            <p class="post-card__commentcount">
+                {{ commentcount }}
+                <span v-if="commentcount > 1">commentaires</span>
+                <span v-else>commentaire</span>
+            </p>
             <div class="post-card__buttons" v-if="isAdmin || isAuthor">
               <button @click.prevent="deletePost">Supprimer</button>
             </div>
@@ -70,6 +75,9 @@ export default {
       },
       getLink: {
           type: Boolean
+      },
+      commentcount: {
+          type: Number
       }
   },
   methods: {
@@ -119,7 +127,8 @@ export default {
         grid-template-areas:
             "postCaption postButtons"
             "postTitle postTitle"
-            "postContent postContent";
+            "postContent postContent"
+            ". postComCount";
         grid-template-columns: 4fr 1fr;
 
         &__title {
@@ -140,6 +149,9 @@ export default {
             color: dimgray;
             justify-self: start;
             margin-left: 10px;
+        }
+        &__commentcount {
+            grid-area: postComCount;
         }
         &__buttons {
             grid-area: postButtons;

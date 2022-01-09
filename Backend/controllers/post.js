@@ -20,6 +20,11 @@ exports.getAllPost = async (req, res) => {
                         firstname: true,
                         lastname: true,
                     }
+                },
+                _count: {
+                    select: {
+                        comment: true
+                    }
                 }
             }
         })
@@ -65,6 +70,11 @@ exports.getOnePost = async (req, res) => {
                         id_user: true,
                         firstname: true,
                         lastname: true,
+                    }
+                },
+                _count: {
+                    select: {
+                        comment: true
                     }
                 },
                 comment: {

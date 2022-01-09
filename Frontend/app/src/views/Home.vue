@@ -17,6 +17,7 @@
       :authorId="post.user.id_user"
       :firstname="post.user.firstname"
       :lastname="post.user.lastname"
+      :commentcount="post._count.comment"
       :getLink="true"
       @deletePost="fetchPosts()"
     />
