@@ -114,7 +114,7 @@ export default {
     }
     &--active {
       color: white;
-      background-color: rgb(235, 0, 0);;
+      background-color: rgb(235, 0, 0);
     }
   }
 

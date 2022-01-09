@@ -2,7 +2,7 @@
     <article class="comment-card">
         <p class="comment-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ relativeDate }}</p>
         <p class="comment-card__content">{{ content }}</p>
-        <div v-if="isAdmin || isAuthor">
+        <div class="comment-card__buttons" v-if="isAdmin || isAuthor">
             <button @click.prevent="deleteComment">Supprimer</button>
         </div>
     </article>
@@ -85,21 +85,47 @@ export default {
 <style lang="scss">
     .comment-card {
         color: gray;
-        border: 1px solid gainsboro;
-        border-radius: 10px;
         background-color: white;
-        padding: 20px;
-        margin: 20px 0;
-        width: 500px;
+        margin: 10px 0;
         overflow: hidden;
-        box-shadow: 10px 25px 50px -12px rgba(0,0,0,0.25);
 
-        &__title {
-            color: black;
+        display: grid;
+        grid-template-areas:
+            "commentCaption commentButtons"
+            "commentContent commentContent";
+        grid-template-columns: 4fr 1fr;
+
+        &__content {
+            grid-area: commentContent;
+            padding: 20px;
+            margin: 0;
+            text-align: left;
         }
         &__caption {
+            grid-area: commentCaption;
             font-size: .8rem;
             color: lightgray;
+            justify-self: start;
+            margin-left: 10px;
+        }
+        &__buttons {
+            grid-area: commentButtons;
+            justify-self: end;
+        }
+    }
+
+    .comment-card button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        color: gray;
+        &:hover {
+            color: red;
+            font-weight: bold;
+        }
+        &:focus-visible {
+            outline: 1px solid #FD2D01;
         }
     }
 </style>

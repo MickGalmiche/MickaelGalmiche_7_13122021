@@ -1,10 +1,8 @@
 <template>
-    <section>
-        <h2>Ajouter un post</h2>
-        <CreatePost 
-          @submitPost="redirectAtHome()"
-        />
-    </section>
+  <CreatePost
+    :textareaRows="20"
+    @submitPost="redirectAtHome()"
+  />
 </template>
 
 <script>
@@ -29,14 +27,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-  .add-post {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    background-color: whitesmoke;
-    margin: 20px 0;
-  }
-</style>

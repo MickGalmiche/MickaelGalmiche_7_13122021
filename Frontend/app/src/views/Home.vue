@@ -1,14 +1,13 @@
 <template>
-  <section class="add-post">
-    <h2>Ajouter un post</h2>
-    <CreatePost 
-      @submitPost="fetchPosts()"
-    />
-  </section>
+  <CreatePost
+    :textareaRows="2"
+    @submitPost="fetchPosts()"
+  />
 
-  <section id="home">
-    <h2>Timeline</h2>
+  <section class="timeline">
+    <h2 class="timeline__title">Timeline</h2>
     <PostItem
+      class="timeline__item"
       v-for="post in posts"
       :key="post.id_post"
       :title="post.title"
@@ -66,15 +65,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  section {
+<style lang="scss">
+
+  .timeline {
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
     align-items: center;
+
+    &__title {
+      color:  rgb(235, 0, 0);
+    }
   }
 
-  .add-post {
-    background-color: whitesmoke;
-    margin: 20px 0;
-  }
 </style>

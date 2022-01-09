@@ -1,43 +1,50 @@
 <template>
-  <section class="post">
-    <PostItem
-      :key="post.id_post"
-      :title="post.title"
-      :date="post.date"
-      :content="post.content"
+  
+  <PostItem
+    class="single-post"
+    :key="post.id_post"
+    :title="post.title"
+    :date="post.date"
+    :content="post.content"
+    :postId="post.id_post"
+    :authorId="user.id_user"
+    :firstname="user.firstname"
+    :lastname="user.lastname"
+    :getLink="false"
+    @deletePost="redirectAtHome()"
+  />
+
+  <section v-if="hasComment" class="comments">
+
+    <AddComment
+      class="create-comment--timeline"
       :postId="post.id_post"
-      :authorId="user.id_user"
-      :firstname="user.firstname"
-      :lastname="user.lastname"
-      :getLink="false"
-      @deletePost="redirectAtHome()"
+      @submitComment="fetchPost()"
     />
+
+    <CommentItem
+      v-for="comment in comments"
+      :key="comment.id_comment"
+      :date="comment.date"
+      :content="comment.content"
+      :commentId="comment.id_comment"
+      :authorId="comment.user.id_user"
+      :firstname="comment.user.firstname"
+      :lastname="comment.user.lastname"
+      @deleteComment="fetchPost()"
+    /> 
+
   </section>
 
-  <section class="comments">
-    <h3>Commentaires</h3>
-    <div v-if="hasComment">
-      <CommentItem
-        v-for="comment in comments"
-        :key="comment.id_comment"
-        :date="comment.date"
-        :content="comment.content"
-        :commentId="comment.id_comment"
-        :authorId="comment.user.id_user"
-        :firstname="comment.user.firstname"
-        :lastname="comment.user.lastname"
-        @deleteComment="fetchPost()"
-      /> 
-    </div>
-    <p v-else>Aucun commentaire</p>
-  </section>
-
-  <section>
-    <AddComment 
+  <section v-else class="no-comments">
+    <h3>Aucun commentaire... Soyez le premier à commenter !</h3>
+    <AddComment
+      class="create-comment--first"
       :postId="post.id_post"
       @submitComment="fetchPost()"
     />
   </section>
+
 </template>
 
 <script>
@@ -99,12 +106,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  section {
+<style lang="scss">
+  
+  .comments {
     background-color: whitesmoke;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
+    max-width: 700px;
+    margin: 20px 0;
   }
+
 </style>
