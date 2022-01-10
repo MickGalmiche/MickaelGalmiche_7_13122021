@@ -1,9 +1,16 @@
 <template>
     <article class="comment-card">
-        <p class="comment-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ relativeDate }}</p>
+        <div class="comment-card__caption">
+            <IconCommentAuthor />
+            <span>{{ firstname }} {{ lastname }}</span>
+            <IconDate /> 
+            <span>{{ calendarDate }}</span>   
+        </div>
         <p class="comment-card__content">{{ content }}</p>
         <div class="comment-card__buttons" v-if="isAdmin || isAuthor">
-            <button @click.prevent="deleteComment">Supprimer</button>
+            <button class="button-delete" @click.prevent="deleteComment">
+                <IconTrash />
+            </button>
         </div>
     </article>
 </template>
@@ -12,9 +19,17 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+import IconTrash from './icons/IconTrash.vue'
+import IconCommentAuthor from './icons/IconCommentAuthor.vue'
+import IconDate from './icons/IconDate.vue'
 
 export default {
   name: 'CommentItem',
+  components: {
+      IconTrash,
+      IconCommentAuthor,
+      IconDate
+  },
   data: () => ({
       relativeDate: "",
       calendarDate: "",  
@@ -104,9 +119,22 @@ export default {
         &__caption {
             grid-area: commentCaption;
             font-size: .8rem;
-            color: lightgray;
+            color: dimgray;
             justify-self: start;
-            margin-left: 10px;
+            margin: 5px 10px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                padding: 5px;
+            }
+
+            svg {
+                width: 1.8em;
+                height: 1.8em;
+            }
         }
         &__buttons {
             grid-area: commentButtons;
@@ -126,6 +154,24 @@ export default {
         }
         &:focus-visible {
             outline: 1px solid #FD2D01;
+        }
+    }
+
+    .button-delete {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: dimgray;
+
+        svg {
+            width: 1.8em;
+            height: 1.8em;
+        }
+        &:hover {
+            color: #FD2D01;
+        }
+        &:focus-visible {
+            outline: none;
         }
     }
 </style>

@@ -3,15 +3,21 @@
     <router-link class="post-link" v-if="getLink" :to="{ name: 'Post', params: {id: postId} }">
         <article class="post-card post-card--clickable">
             <h3 class="post-card__title">{{ title }}</h3>
-            <p class="post-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ calendarDate }}</p>
+            <div class="post-card__caption">
+                <IconAuthor />
+                <span>{{ firstname }} {{ lastname }}</span>
+                <IconDate /> 
+                <span>{{ calendarDate }}</span>   
+            </div>
             <p class="post-card__content">{{ content }}</p>
-            <p class="post-card__commentcount">
-                {{ commentcount }}
-                <span v-if="commentcount > 1">commentaires</span>
-                <span v-else>commentaire</span>
-            </p>
+            <div class="post-card__commentcount">
+                <span>{{ commentcount }}</span>
+                <IconComment />
+            </div>
             <div class="post-card__buttons" v-if="isAdmin || isAuthor">
-              <button @click.prevent="deletePost">Supprimer</button>
+              <button class="button-delete" @click.prevent="deletePost">
+                  <IconTrash />
+              </button>
             </div>
         </article>
     </router-link>
@@ -19,10 +25,17 @@
 
     <article v-else class="post-card">
         <h2 class="post-card__title">{{ title }}</h2>
-        <p class="post-card__caption">Publié par {{ firstname }} {{ lastname }}, {{ calendarDate }}</p>
+        <div class="post-card__caption">
+            <IconAuthor />
+            <span>{{ firstname }} {{ lastname }}</span>
+            <IconDate /> 
+            <span>{{ calendarDate }}</span>   
+        </div>
         <p class="post-card__content">{{ content }}</p>
         <div class="post-card__buttons" v-if="isAdmin || isAuthor">
-          <button @click.prevent="deletePost">Supprimer</button>
+          <button class="button-delete" @click.prevent="deletePost">
+              <IconTrash />
+          </button>
         </div>
     <div v-else>...</div>
     </article>
@@ -32,9 +45,19 @@
 import { mapState } from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+import IconTrash from './icons/IconTrash.vue'
+import IconComment from './icons/IconComment.vue'
+import IconAuthor from './icons/IconAuthor.vue'
+import IconDate from './icons/IconDate.vue'
 
 export default {
   name: 'PostItem',
+  components: {
+      IconTrash,
+      IconComment,
+      IconAuthor,
+      IconDate
+  },
   data: () => ({
       relativeDate: "",
       calendarDate: "",  
@@ -135,7 +158,7 @@ export default {
             grid-area: postTitle;
             color: black;
             padding: 20px;
-            margin: 0
+            margin: 0;
         }
         &__content {
             grid-area: postContent;
@@ -148,10 +171,36 @@ export default {
             font-size: .8rem;
             color: dimgray;
             justify-self: start;
-            margin-left: 10px;
+            margin: 5px 10px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            span {
+                padding: 5px;
+            }
+
+            svg {
+                width: 1.8em;
+                height: 1.8em;
+            }
         }
         &__commentcount {
             grid-area: postComCount;
+            color: dimgray;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin: 5px;
+
+            p {
+                margin: auto 0;
+            }
+            svg {
+                width: 1.8em;
+                height: 1.8em;
+            }
         }
         &__buttons {
             grid-area: postButtons;
@@ -174,15 +223,18 @@ export default {
         text-decoration: none;
     }
 
-    .post-card button {
+    .button-delete {
         background-color: transparent;
         border: none;
         cursor: pointer;
-        padding: 10px;
         color: dimgray;
+
+        svg {
+            width: 1.8em;
+            height: 1.8em;
+        }
         &:hover {
-            color: red;
-            font-weight: bold;
+            color: #FD2D01;
         }
         &:focus-visible {
             outline: none;
