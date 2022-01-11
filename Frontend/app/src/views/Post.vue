@@ -94,26 +94,55 @@ export default {
           this.user = response.data.user,
           this.comments = response.data.comment
           ))
-        .catch(error => console.error(error))
+        .catch(error => {
+          console.error(`${error.request.status} ${error.request.statusText} : ${error.response.data.error}`)
+        })
     },
     redirectAtHome() {
       this.$router.push({ name: 'Home' })
     }
   },
   mounted() {
-      this.fetchPost()
+      this.fetchPost();
   }
 }
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
   
   .comments {
-    background-color: whitesmoke;
-    border-radius: 5px;
-    box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-    max-width: 700px;
-    margin: 20px 0;
+    background-color: $bg-color-secondary;
+    margin: map-get($margin, large) map-get($margin, none);
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    width: 100%;
+
+    @include for-large-mobile {
+      border-radius: map-get($border-radius, small);
+      width: 500px;
+      @include box-shadow;
+    }
+
+    @include for-tablet {
+      width: 700px;
+    }
   }
 
+  .no-comments {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+
+    @include for-large-mobile {
+      border-radius: map-get($border-radius, small);
+      width: 500px;
+    }
+    @include for-tablet {
+      width: 700px;
+    }
+  }
 </style>

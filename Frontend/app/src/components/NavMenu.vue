@@ -42,16 +42,19 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
+
     .header {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        background-color: #FD2D01;
-        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        background-color: $color-primary;
+        @include box-shadow;
 
         &__title {
-            margin: 0;
+            margin: map-get($margin, none);
         }
         &__img {
             width: 250px;
@@ -59,7 +62,7 @@ export default {
             object-fit: cover;
         }
         &__link {
-            color: white;
+            color: $color-tertiary;
         }
     }
 
@@ -67,11 +70,11 @@ export default {
         &__list {
             list-style: none;
             display: flex;
-            margin: 0;
-            padding-left: 0;
+            margin: map-get($margin, none);
+            padding-left: map-get($margin, none);
         }
         &__item {
-            padding: 10px;
+            padding: map-get($margin, medium);
         }
     }
 
@@ -79,11 +82,10 @@ export default {
         &__link {
             font-weight: bold;
             cursor: pointer;
-            color: white;
+            color: $color-tertiary;
 
             &:hover {
-                /* color: #FD2D01; */
-                color: #FFD7D7;
+                color: $color-secondary;
             }
         }
     }

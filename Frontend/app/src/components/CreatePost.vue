@@ -4,7 +4,7 @@
         <form class="create-post__form post-form" @submit.prevent="postSubmit">
 
             <input class="post-form__item" type="text" v-model="title" placeholder="Titre" required>
-            <textarea class="post-form__item" v-model="content" :rows="textareaRows" placeholder="Rédigez votre article ici !" required></textarea>
+            <textarea class="post-form__item post-form__textarea" v-model="content" :rows="textareaRows" placeholder="Rédigez votre article ici !" required></textarea>
 
             <button class="post-form__button" type="submit">Envoyer</button>
         </form>
@@ -59,54 +59,66 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
+
     .create-post {
-        width: 90%;
-        max-width: 900px;
-        margin-top: 20px;
-        padding: 10px;
-        background-color: white;
+        background-color: $bg-color-primary;
         border-color: transparent;
-        border-radius: 5px;
-        box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
+        width: 100%;
+
+        @include for-large-mobile {
+            width: 500px;
+            margin-top: map-get($margin, large);
+            padding: map-get($padding, medium);
+            border-radius: map-get($border-radius, small);
+            @include box-shadow;
+        }
+
+        @include for-tablet {
+            width: 700px;
+        }
     }
 
     .post-form {
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: map-get($padding, medium);
 
         &__item {
             padding: .5rem;
-            margin: 10px 0;
+            margin: map-get($margin, medium) map-get($margin, none);
             border: 1px solid transparent;
-            border-radius: 5px;
-            background-color: whitesmoke;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-secondary;
             outline: none;
 
             &:focus {
-                background-color: #FFD7D7;
-                border: 1px solid #FD2D01;
+                border-color: $color-primary;
             }
+        }
+        &__textarea {
+            resize: vertical;
         }
         &__button {
             align-self: center;
             max-width: 100px;
             padding: .5rem;
-            margin: 10px 0;
+            margin: map-get($margin, medium) map-get($margin, none);
             cursor: pointer;
             border: 1px solid transparent;
-            border-radius: 5px;
-            background-color: #666;
-            color: white;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-tertiary;
+            color: $color-tertiary;
             font-weight: bold;
 
             &:hover {
-                box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-                background-color: #FD2D01;
-                color: white;
+                @include hover-box-shadow;
+                background-color: $color-primary;
+                color: $color-tertiary;
             }
             &:focus-visible {
-            outline: 1px solid #FD2D01;
+            outline: 1px solid $color-primary;
             }
         }
     }

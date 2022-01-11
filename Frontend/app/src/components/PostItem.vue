@@ -135,16 +135,29 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
 
     .post-card {
-        margin: 20px 0;
-        color: black;
-        border: 1px solid transparent;
-        border-radius: 5px;
-        box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-        background-color: white;
-        width: 700px;
+        margin: map-get($margin, medium) map-get($margin, none);
+        background-color: $bg-color-primary;
         overflow: hidden;
+        width: 100%;
+
+        @include for-large-mobile {
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            @include box-shadow;
+            width: 500px;
+
+            &--clickable:hover {
+                @include hover-box-shadow;
+            }
+        }
+
+        @include for-tablet {
+            width: 700px;
+        }
 
         display: grid;
         grid-template-areas:
@@ -156,29 +169,28 @@ export default {
 
         &__title {
             grid-area: postTitle;
-            color: black;
-            padding: 20px;
-            margin: 0;
+            padding: map-get($padding, large);
+            margin: map-get($margin, none);
         }
         &__content {
             grid-area: postContent;
-            padding: 20px;
-            margin: 0;
+            padding: map-get($padding, large);
+            margin: map-get($margin, none);
             text-align: justify;
         }
         &__caption {
             grid-area: postCaption;
             font-size: .8rem;
-            color: dimgray;
+            color: $bg-color-tertiary;
             justify-self: start;
-            margin: 5px 10px;
+            margin: map-get($margin, small) map-get($margin, medium);
 
             display: flex;
             justify-content: center;
             align-items: center;
 
             span {
-                padding: 5px;
+                padding: map-get($padding , small);
             }
 
             svg {
@@ -188,11 +200,11 @@ export default {
         }
         &__commentcount {
             grid-area: postComCount;
-            color: dimgray;
+            color: $bg-color-tertiary;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            margin: 5px;
+            margin: map-get($margin , small);
 
             p {
                 margin: auto 0;
@@ -206,35 +218,26 @@ export default {
             grid-area: postButtons;
             justify-self: end;
         }
-
-        &--clickable {
-            
-            &:hover {
-                box-shadow: 10px 25px 50px -12px rgba(0,0,0,0.25);
-            }
-            &:active {
-                box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 5px rgba(60,64,67,0.15);
-
-            }
-        }
     }
 
     .post-link {
         text-decoration: none;
+        color: black;
     }
 
     .button-delete {
         background-color: transparent;
         border: none;
         cursor: pointer;
-        color: dimgray;
+        color: $bg-color-tertiary;
+        margin: map-get($margin , small);
 
         svg {
             width: 1.8em;
             height: 1.8em;
         }
         &:hover {
-            color: #FD2D01;
+            color: $color-primary;
         }
         &:focus-visible {
             outline: none;

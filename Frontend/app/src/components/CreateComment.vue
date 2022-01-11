@@ -3,7 +3,7 @@
         <h3 class="create-comment__title">Poster un commentaire</h3>
         <form class="create-comment__form comment-form" @submit.prevent="commentSubmit">
 
-            <textarea class="comment-form__item" v-model="content" cols="100" rows="10" placeholder="Rédigez votre commentaire ici !" required></textarea>
+            <textarea class="comment-form__item" v-model="content" rows="10" placeholder="Rédigez votre commentaire ici !" required></textarea>
 
             <button class="comment-form__button" type="submit">Envoyer</button>
         </form>
@@ -54,19 +54,27 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
+
 
     .create-comment {
-        padding: 10px 0;
-        margin-bottom: 40px;
-        background-color: white;
+        padding: map-get($padding, medium) map-get($padding, none);
+        margin-bottom: map-get($margin, large);
+        background-color: $bg-color-primary;
 
-        &--first {
-            border-color: transparent;
-            border-radius: 5px;
-            box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-        }
-        &--timeline {
-            border-radius: 5px 5px 0 0;
+        @include for-large-mobile {
+            &--first {
+                border-radius: map-get($border-radius, small);
+                border-color: transparent;
+                @include box-shadow;
+            }
+            &--timeline {
+                border-top-left-radius: map-get($border-radius, small);
+                border-top-right-radius: map-get($border-radius, small);
+                border-bottom-left-radius: map-get($border-radius, none);
+                border-bottom-right-radius: map-get($border-radius, none);
+            }
         }
 
     }
@@ -74,40 +82,39 @@ export default {
     .comment-form {
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: map-get($padding, medium);
 
         &__item {
             padding: .5rem;
-            margin: 10px 0;
+            margin: map-get($margin, medium) map-get($margin, none);
             border: 1px solid transparent;
-            border-radius: 5px;
-            background-color: whitesmoke;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-secondary;
             outline: none;
 
             &:focus {
-                background-color: #FFD7D7;
-                border: 1px solid #FD2D01;
+                border: 1px solid $color-primary;
             }
         }
         &__button {
             align-self: center;
             max-width: 100px;
             padding: .5rem;
-            margin: 10px 0;
+            margin: map-get($margin, medium) map-get($margin, none);
             cursor: pointer;
             border: 1px solid transparent;
-            border-radius: 5px;
-            background-color: #666;
-            color: white;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-tertiary;
+            color: $color-tertiary;
             font-weight: bold;
 
             &:hover {
-                box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-                background-color: #FD2D01;
-                color: white;
+                @include box-shadow;
+                background-color: $color-primary;
+                color: $color-tertiary;
             }
             &:focus-visible {
-                outline: 1px solid #FD2D01;
+                outline: 1px solid $color-primary;
             }
         }
     }

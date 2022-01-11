@@ -54,41 +54,46 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
 
     .signup-form {
         display: flex;
         flex-direction: column;
-        padding: 10px;
+        padding: map-get($padding, medium);
 
         &__item {
             padding: .5rem;
-            margin: 10px 0;
-            border:1px solid transparent;
-            border-radius: 5px;
-            background-color: whitesmoke;
+            margin: map-get($margin, medium) map-get($margin, none);
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-secondary;
             outline: none;
 
             &:focus {
-                background-color: #FFD7D7;
-                border: 1px solid #FD2D01;
+                background-color: $color-secondary;
+                border: 1px solid $color-primary;
             }
         }
         &__button {
             align-self: center;
             max-width: 100px;
             padding: .5rem;
-            margin: 10px 0;
+            margin: map-get($margin, medium) map-get($margin, none);
             cursor: pointer;
             border: 1px solid transparent;
-            border-radius: 5px;
-            background-color: #666;
-            color: white;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-tertiary;
+            color: $color-tertiary;
             font-weight: bold;
 
             &:hover {
-                box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
-                background-color: #FD2D01;
-                color: white;
+                @include hover-box-shadow;
+                background-color: $color-primary;
+                color: $color-tertiary;
+            }
+            &:focus-visible {
+                outline: 1px solid $color-primary;
             }
         }
     }

@@ -98,10 +98,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
+
     .comment-card {
-        color: gray;
-        background-color: white;
-        margin: 10px 0;
+        color: $bg-color-tertiary;
+        background-color: $bg-color-primary;
+        margin: map-get($margin, medium) map-get($margin, none);
         overflow: hidden;
 
         display: grid;
@@ -112,23 +115,23 @@ export default {
 
         &__content {
             grid-area: commentContent;
-            padding: 20px;
-            margin: 0;
+            padding: map-get($padding, large);
+            margin: map-get($margin, none);
             text-align: left;
         }
         &__caption {
             grid-area: commentCaption;
             font-size: .8rem;
-            color: dimgray;
+            color: $bg-color-tertiary;
             justify-self: start;
-            margin: 5px 10px;
+            margin: map-get($margin, small) map-get($margin, medium);
 
             display: flex;
             justify-content: center;
             align-items: center;
 
             span {
-                padding: 5px;
+                padding: map-get($padding, small);
             }
 
             svg {
@@ -146,14 +149,14 @@ export default {
         background-color: transparent;
         border: none;
         cursor: pointer;
-        padding: 10px;
-        color: gray;
+        padding: map-get($padding, medium);
+        color: $bg-color-tertiary;
         &:hover {
-            color: red;
+            color: $color-primary-darken;
             font-weight: bold;
         }
         &:focus-visible {
-            outline: 1px solid #FD2D01;
+            outline: 1px solid $color-primary;
         }
     }
 
@@ -161,14 +164,14 @@ export default {
         background-color: transparent;
         border: none;
         cursor: pointer;
-        color: dimgray;
+        color: $bg-color-tertiary;
 
         svg {
             width: 1.8em;
             height: 1.8em;
         }
         &:hover {
-            color: #FD2D01;
+            color: $color-primary;
         }
         &:focus-visible {
             outline: none;

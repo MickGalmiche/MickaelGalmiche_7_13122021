@@ -58,16 +58,18 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
+@import "@/assets/scss/_mixins.scss";
 
   body {
-    margin: 0;
-    background-color: #FFD7D7;
+    margin: map-get($margin, none);
+    background-color: $color-secondary;
   }
 
   main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   #app {
@@ -80,10 +82,10 @@ export default {
   .auth {
     width: max-content;
     margin-top: 100px;
-    background-color: white;
+    background-color: $color-tertiary;
     border-color: transparent;
-    border-radius: 5px;
-    box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.25);
+    border-radius: map-get($border-radius, small);
+    @include box-shadow;
     display: grid;
     grid-template-areas: 
     "tabLogin tabSignup"
@@ -93,28 +95,35 @@ export default {
     &__form {
       grid-area: authForm;
       width: 300px;
+
+      @include for-large-mobile {
+        width: 400px;
+      }
     }
   }
 
   .tab-button {
-    background-color: #666;
-    color: white;
+    background-color: $bg-color-tertiary;
+    color: $color-tertiary;
     border: none;
     font-weight: bold;
-    padding: 8px;
+    padding: map-get($padding, medium);
     cursor: pointer;
 
     &__Login {
       grid-area: tabLogin;
-      border-top-left-radius: 5px;
+      border-top-left-radius: map-get($border-radius, small);
     }
     &__Signup {
       grid-area: tabSignup;
-      border-top-right-radius: 5px;
+      border-top-right-radius: map-get($border-radius, small);
     }
     &--active {
-      color: white;
-      background-color: rgb(235, 0, 0);
+      color: $color-tertiary;
+      background-color: $color-primary-darken;
+    }
+    &:focus-visible {
+      outline: 1px solid $color-primary;
     }
   }
 

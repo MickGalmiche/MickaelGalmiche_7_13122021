@@ -67,14 +67,16 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_variables.scss";
 
   .timeline {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: center;
+    row-gap: 10px;
 
     &__title {
-      color:  rgb(235, 0, 0);
+      color:  $color-primary-darken;
     }
   }
 

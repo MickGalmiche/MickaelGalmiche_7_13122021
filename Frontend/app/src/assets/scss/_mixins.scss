@@ -1,0 +1,31 @@
+@mixin box-shadow($color: $shadow-color, $size: $shadow-size, $blur: $shadow-blur) {
+    box-shadow: 0 $size $blur $color;
+}
+
+@mixin hover-box-shadow($color: $shadow-color, $size: $shadow-size-hover, $blur: $shadow-blur-hover) {
+    box-shadow: 0 $size $blur $color;
+}
+
+@mixin for-large-mobile {
+    @media screen and (min-width: map-get($breakpoints, large-mobile)) {
+        @content;
+    }
+}
+
+@mixin for-tablet {
+    @media screen and (min-width: map-get($breakpoints, tablet)) {
+        @content;
+    }
+}
+
+@mixin for-desktop {
+    @media screen and (min-width: map-get($breakpoints, desktop)) {
+        @content;
+    }
+}
+
+@mixin for-large-desktop {
+    @media screen and (min-width: map-get($breakpoints, large-desktop)) {
+        @content;
+    }
+}
