@@ -4,7 +4,7 @@
             <IconCommentAuthor />
             <span>{{ firstname }} {{ lastname }}</span>
             <IconDate /> 
-            <span>{{ calendarDate }}</span>   
+            <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
         </div>
         <p class="comment-card__content">{{ content }}</p>
         <div class="comment-card__buttons" v-if="isAdmin || isAuthor">
@@ -30,11 +30,12 @@ export default {
       IconCommentAuthor,
       IconDate
   },
-  data: () => ({
-      relativeDate: "",
-      calendarDate: "",  
-      formatedDate: ""
-  }),
+  data() {
+      return {
+          relativeDate: '',
+          calendarDate: ''
+      }
+  },
   computed: {
       ...mapState([
       'accessToken',
@@ -67,14 +68,10 @@ export default {
       }
   },
   methods: {
-      getRelativeDate() {
-          return moment(this.date).startOf('hour').fromNow()
-      },
-      getCalendarDate() {
-          return moment(this.date).calendar()
-      },
-      getFormattedDate() {
-          return moment(this.date).format('LLLL')
+      getDate() {
+          moment.locale("fr");
+          this.relativeDate = moment(this.date).fromNow()
+          this.calendarDate = moment(this.date).format('LLLL')
       },
       deleteComment() {
         axios
@@ -90,9 +87,7 @@ export default {
       }
   },
   mounted() {
-      this.relativeDate = this.getRelativeDate()
-      this.calendarDate = this.getCalendarDate()
-      this.formatedDate = this.getFormattedDate()
+      this.getDate()
   }
 }
 </script>

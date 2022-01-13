@@ -7,7 +7,7 @@
                 <IconAuthor />
                 <span>{{ firstname }} {{ lastname }}</span>
                 <IconDate /> 
-                <span>{{ calendarDate }}</span>   
+                <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
             </div>
             <p class="post-card__content">{{ content }}</p>
             <div class="post-card__commentcount">
@@ -29,7 +29,7 @@
             <IconAuthor />
             <span>{{ firstname }} {{ lastname }}</span>
             <IconDate /> 
-            <span>{{ calendarDate }}</span>   
+            <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
         </div>
         <p class="post-card__content">{{ content }}</p>
         <div class="post-card__buttons" v-if="isAdmin || isAuthor">
@@ -58,11 +58,12 @@ export default {
       IconAuthor,
       IconDate
   },
-  data: () => ({
-      relativeDate: "",
-      calendarDate: "",  
-      formattedDate: ""
-  }),
+  data() {
+      return {
+          relativeDate: '',
+          calendarDate: ''
+      }
+  },
   computed: {
     ...mapState([
       'accessToken',
@@ -104,14 +105,10 @@ export default {
       }
   },
   methods: {
-      getRelativeDate() {
-          return moment(this.date).startOf('hour').fromNow()
-      },
-      getCalendarDate() {
-          return moment(this.date).calendar()
-      },
-      getFormattedDate() {
-          return moment(this.date).format('LLLL')
+      getDate() {
+          moment.locale("fr");
+          this.relativeDate = moment(this.date).fromNow()
+          this.calendarDate = moment(this.date).format('LLLL')
       },
       deletePost() {
         axios
@@ -127,9 +124,7 @@ export default {
       }
   },
   mounted() {
-      this.relativeDate = this.getRelativeDate()
-      this.calendarDate = this.getCalendarDate()
-      this.formattedDate = this.getFormattedDate()
+      this.getDate()
   }
 }
 </script>
