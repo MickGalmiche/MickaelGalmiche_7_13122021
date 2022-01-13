@@ -32,6 +32,7 @@
       :firstname="comment.user.firstname"
       :lastname="comment.user.lastname"
       @deleteComment="fetchPost()"
+      @updateComment="fetchPost()"
     /> 
 
   </section>

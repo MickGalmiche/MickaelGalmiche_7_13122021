@@ -6,8 +6,20 @@
             <IconDate /> 
             <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
         </div>
-        <p class="comment-card__content">{{ content }}</p>
+
+        <div class="comment-card__content comment-card__content--update content-update" v-if="currentlyUpdating">
+            <textarea class="content-update__textarea" v-model="updatingContent" rows="4" required></textarea>
+            <div class="content-update__buttons update-buttons">
+                <button class="update-buttons__item" @click.prevent="updateComment">Confirmer</button>
+                <button class="update-buttons__item" @click.prevent="closeUpdateForm">Annuler</button>
+            </div>
+        </div>
+
+        <p v-else class="comment-card__content">{{ content }}</p>
         <div class="comment-card__buttons" v-if="isAdmin || isAuthor">
+            <button class="button-edit" @click.prevent="openUpdateForm">
+                <IconEdit />
+            </button>
             <button class="button-delete" @click.prevent="deleteComment">
                 <IconTrash />
             </button>
@@ -22,70 +34,96 @@ import moment from 'moment'
 import IconTrash from './icons/IconTrash.vue'
 import IconCommentAuthor from './icons/IconCommentAuthor.vue'
 import IconDate from './icons/IconDate.vue'
+import IconEdit from './icons/IconEdit.vue'
 
 export default {
-  name: 'CommentItem',
-  components: {
-      IconTrash,
-      IconCommentAuthor,
-      IconDate
-  },
-  data() {
-      return {
-          relativeDate: '',
-          calendarDate: ''
-      }
-  },
-  computed: {
-      ...mapState([
-      'accessToken',
-      'userId',
-      'userRole'
-    ]),
-    isAuthor() {
-      return this.userId == this.authorId ? true : false;
+    name: 'CommentItem',
+    components: {
+        IconTrash,
+        IconCommentAuthor,
+        IconDate,
+        IconEdit
     },
-    isAdmin() {
-      return this.userRole == 'ADMIN' ? true : false;
-    }
-  },
-  props: {
-      commentId: {
-          type: Number
-      },
-      date: {},
-      content: {
-          type: String
-      },
-      authorId: {
-          type: Number
-      },
-      firstname: {
-          type: String
-      },
-      lastname: {
-          type: String
-      }
-  },
-  methods: {
-      getDate() {
-          moment.locale("fr");
-          this.relativeDate = moment(this.date).fromNow()
-          this.calendarDate = moment(this.date).format('LLLL')
-      },
-      deleteComment() {
-        axios
-          .delete(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
-            headers: {
-              'Authorization': `Bearer ${this.accessToken}`
-              }
+    data() {
+        return {
+            relativeDate: '',
+            calendarDate: '',
+            currentlyUpdating: false,
+            updatingContent:''
+        }
+    },
+    computed: {
+        ...mapState([
+        'accessToken',
+        'userId',
+        'userRole'
+        ]),
+        isAuthor() {
+            return this.userId == this.authorId ? true : false;
+        },
+        isAdmin() {
+            return this.userRole == 'ADMIN' ? true : false;
+        }
+    },
+    props: {
+        commentId: {
+            type: Number
+        },
+        date: {},
+        content: {
+            type: String
+        },
+        authorId: {
+            type: Number
+        },
+        firstname: {
+            type: String
+        },
+        lastname: {
+            type: String
+        }
+    },
+    methods: {
+        getDate() {
+            moment.locale("fr");
+            this.relativeDate = moment(this.date).fromNow()
+            this.calendarDate = moment(this.date).format('LLLL')
+        },
+        deleteComment() {
+            axios
+                .delete(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`
+                        }
+                    })
+                .then(() => {
+                    this.$emit('deleteComment')
+                })
+                .catch(error => console.error(error))
+        },
+        openUpdateForm() {
+            this.currentlyUpdating = true
+            this.updatingContent = this.content
+        },
+        closeUpdateForm() {
+            this.currentlyUpdating = false
+        },
+        updateComment() {
+            axios
+            .put(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
+                content: this.updatingContent
+                }, {  
+                headers: {
+                    'Authorization': `Bearer ${this.accessToken}`
+                }
             })
-          .then(() => {
-            this.$emit('deleteComment')
-          })
-          .catch(error => console.error(error))
-      }
-  },
+            .then(() => {
+                this.$emit('updateComment')
+                this.closeUpdateForm()
+            })
+            .catch(error => console.log(error))
+        }
+    },
   mounted() {
       this.getDate()
   }
@@ -140,22 +178,7 @@ export default {
         }
     }
 
-    .comment-card button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        padding: map-get($padding, medium);
-        color: $bg-color-tertiary;
-        &:hover {
-            color: $color-primary-darken;
-            font-weight: bold;
-        }
-        &:focus-visible {
-            outline: 1px solid $color-primary;
-        }
-    }
-
-    .button-delete {
+    .button-delete, .button-edit {
         background-color: transparent;
         border: none;
         cursor: pointer;
@@ -170,6 +193,50 @@ export default {
         }
         &:focus-visible {
             outline: none;
+        }
+    }
+
+    .content-update {
+        display: flex;
+        flex-direction: column;
+
+        &__textarea {
+            padding: .5rem;
+            margin: map-get($margin, medium) map-get($margin, none);
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-secondary;
+            outline: none;
+            resize: vertical;
+
+            &:focus {
+                border: 1px solid $color-primary;
+            }
+        }
+    }
+
+    .update-buttons {
+        display: flex;
+        justify-content: center;
+        &__item {
+            max-width: 100px;
+            padding: .5rem;
+            margin: map-get($margin, none) map-get($margin, medium) ;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-tertiary;
+            color: $color-tertiary;
+            font-weight: bold;
+
+            &:hover {
+                @include box-shadow;
+                background-color: $color-primary;
+                color: $color-tertiary;
+            }
+            &:focus-visible {
+                outline: 1px solid $color-primary;
+            }
         }
     }
 </style>
