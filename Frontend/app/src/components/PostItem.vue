@@ -15,9 +15,9 @@
                 <IconComment />
             </div>
             <div class="post-card__buttons" v-if="isAdmin || isAuthor">
-              <button class="button-delete" @click.prevent="deletePost">
-                  <IconTrash />
-              </button>
+                <button class="button-delete" @click.prevent="deletePost">
+                    <IconTrash />
+                </button>
             </div>
         </article>
     </router-link>
@@ -31,13 +31,25 @@
             <IconDate /> 
             <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
         </div>
-        <p class="post-card__content">{{ content }}</p>
+
+        <div class="post-card__content post-card__content--update post-update" v-if="currentlyUpdating">
+            <input class="post-update__item" type="text" v-model="updatingTitle" required>
+            <textarea class="post-update__item post-update__item--textarea" v-model="updatingContent" rows="4" required></textarea>
+            <div class="post-update__buttons post-buttons">
+                <button class="post-buttons__item" @click.prevent="updatePost">Confirmer</button>
+                <button class="post-buttons__item" @click.prevent="closeUpdateForm">Annuler</button>
+            </div>
+        </div>
+
+        <p v-else class="post-card__content">{{ content }}</p>
         <div class="post-card__buttons" v-if="isAdmin || isAuthor">
+          <button class="button-edit" @click.prevent="openUpdateForm">
+              <IconEdit />
+          </button>
           <button class="button-delete" @click.prevent="deletePost">
               <IconTrash />
           </button>
         </div>
-    <div v-else>...</div>
     </article>
 </template>
 
@@ -49,6 +61,7 @@ import IconTrash from './icons/IconTrash.vue'
 import IconComment from './icons/IconComment.vue'
 import IconAuthor from './icons/IconAuthor.vue'
 import IconDate from './icons/IconDate.vue'
+import IconEdit from './icons/IconEdit.vue'
 
 export default {
   name: 'PostItem',
@@ -56,12 +69,16 @@ export default {
       IconTrash,
       IconComment,
       IconAuthor,
-      IconDate
+      IconDate,
+      IconEdit
   },
   data() {
       return {
           relativeDate: '',
-          calendarDate: ''
+          calendarDate: '',
+          currentlyUpdating: false,
+          updatingTitle: '',
+          updatingContent: ''
       }
   },
   computed: {
@@ -121,6 +138,30 @@ export default {
             this.$emit('deletePost')
           })
           .catch(error => console.error(error))
+      },
+      openUpdateForm() {
+          this.currentlyUpdating = true
+          this.updatingTitle = this.title
+          this.updatingContent = this.content
+      },
+      closeUpdateForm() {
+          this.currentlyUpdating = false
+      },
+      updatePost() {
+          axios
+          .put(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+              title: this.updatingTitle,
+              content: this.updatingContent
+              }, {  
+              headers: {
+                  'Authorization': `Bearer ${this.accessToken}`
+              }
+          })
+          .then(() => {
+              this.$emit('updatePost')
+              this.closeUpdateForm()
+          })
+          .catch(error => console.log(error))
       }
   },
   mounted() {
@@ -220,7 +261,7 @@ export default {
         color: black;
     }
 
-    .button-delete {
+    .button-delete, .button-edit {
         background-color: transparent;
         border: none;
         cursor: pointer;
@@ -236,6 +277,53 @@ export default {
         }
         &:focus-visible {
             outline: none;
+        }
+    }
+
+    .post-update {
+        display: flex;
+        flex-direction: column;
+
+        &__item {
+            padding: .5rem;
+            margin: map-get($margin, medium) map-get($margin, none);
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-secondary;
+            outline: none;
+
+            &--textarea {
+                resize: vertical;
+            }
+
+            &:focus {
+                border: 1px solid $color-primary;
+            }
+        }
+    }
+
+    .post-buttons {
+        display: flex;
+        justify-content: center;
+        &__item {
+            max-width: 100px;
+            padding: .5rem;
+            margin: map-get($margin, none) map-get($margin, medium) ;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: map-get($border-radius, small);
+            background-color: $bg-color-tertiary;
+            color: $color-tertiary;
+            font-weight: bold;
+
+            &:hover {
+                @include box-shadow;
+                background-color: $color-primary;
+                color: $color-tertiary;
+            }
+            &:focus-visible {
+                outline: 1px solid $color-primary;
+            }
         }
     }
 </style>

@@ -12,6 +12,7 @@
     :lastname="user.lastname"
     :getLink="false"
     @deletePost="redirectAtHome()"
+    @updatePost="fetchPost()"
   />
 
   <section v-if="hasComment" class="comments">
