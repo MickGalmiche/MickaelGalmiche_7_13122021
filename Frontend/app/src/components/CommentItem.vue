@@ -141,10 +141,19 @@ export default {
         overflow: hidden;
 
         display: grid;
-        grid-template-areas:
-            "commentCaption commentButtons"
-            "commentContent commentContent";
-        grid-template-columns: 4fr 1fr;
+        grid-template-areas: 
+            "commentCaption"
+            "commentContent"
+            "commentButtons";
+        grid-template-columns: 1fr;
+
+
+        @include for-tablet {
+            grid-template-areas:
+                "commentCaption commentButtons"
+                "commentContent commentContent";
+            grid-template-columns: 4fr 1fr;
+        }
 
         &__content {
             grid-area: commentContent;

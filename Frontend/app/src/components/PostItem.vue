@@ -194,15 +194,21 @@ export default {
 
         @include for-tablet {
             width: 700px;
+            grid-template-areas:
+                "postCaption postButtons"
+                "postTitle postTitle"
+                "postContent postContent"
+                ". postComCount";
+            grid-template-columns: 4fr 1fr;
         }
 
         display: grid;
         grid-template-areas:
-            "postCaption postButtons"
+            "postCaption postCaption"
             "postTitle postTitle"
             "postContent postContent"
-            ". postComCount";
-        grid-template-columns: 4fr 1fr;
+            "postButtons postComCount";
+        grid-template-columns: repeat(2, 1fr);
 
         &__title {
             grid-area: postTitle;
@@ -254,7 +260,11 @@ export default {
         }
         &__buttons {
             grid-area: postButtons;
-            justify-self: end;
+            justify-self: start;
+
+            @include for-tablet {
+                justify-self: end;
+            }
         }
     }
 
