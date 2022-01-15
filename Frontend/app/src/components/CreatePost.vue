@@ -78,6 +78,10 @@ export default {
         @include for-tablet {
             width: 700px;
         }
+
+        &__title {
+            font-family: $font-secondary;
+        }
     }
 
     .post-form {

@@ -77,6 +77,7 @@ export default {
 
     &__title {
       color:  $color-primary-darken;
+      font-family: $font-secondary;
     }
   }
 

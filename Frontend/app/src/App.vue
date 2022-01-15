@@ -49,7 +49,7 @@ export default {
   methods: {
     ...mapActions([
       'fetchAccessToken'
-    ]),
+    ])
   },
   created() {
     this.fetchAccessToken();
@@ -58,6 +58,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_typography.scss";
 @import "@/assets/scss/_variables.scss";
 @import "@/assets/scss/_mixins.scss";
 
@@ -73,7 +74,8 @@ export default {
   }
 
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: $font-primary;
+    font-weight: map-get($font-weight, light);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;

@@ -24,7 +24,7 @@
 
 
     <article v-else class="post-card">
-        <h2 class="post-card__title">{{ title }}</h2>
+        <h2 v-if="!currentlyUpdating" class="post-card__title">{{ title }}</h2>
         <div class="post-card__caption">
             <IconAuthor />
             <span>{{ firstname }} {{ lastname }}</span>
@@ -171,6 +171,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/scss/_typography.scss";
 @import "@/assets/scss/_variables.scss";
 @import "@/assets/scss/_mixins.scss";
 
@@ -207,6 +208,7 @@ export default {
             grid-area: postTitle;
             padding: map-get($padding, large);
             margin: map-get($margin, none);
+            font-family: $font-secondary;
         }
         &__content {
             grid-area: postContent;

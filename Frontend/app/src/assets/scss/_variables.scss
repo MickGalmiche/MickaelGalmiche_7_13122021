@@ -7,6 +7,16 @@ $bg-color-primary: white;
 $bg-color-secondary: darken($bg-color-primary, 6%);
 $bg-color-tertiary: darken($bg-color-primary, 60%);
 
+$font-primary: 'Pridi', serif;
+$font-secondary: 'Puritan', sans-serif;
+
+$font-weight: (
+    black: 900,
+    medium: 500,
+    light: 300,
+    thin: 100
+);
+
 $shadow-color: rgba(0, 0, 0, 0.25);
 $shadow-size: 2px;
 $shadow-blur: 8px;

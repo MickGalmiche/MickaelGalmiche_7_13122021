@@ -76,6 +76,9 @@ export default {
                 border-bottom-right-radius: map-get($border-radius, none);
             }
         }
+        &__title {
+            font-family: $font-secondary;
+        }
 
     }
 
