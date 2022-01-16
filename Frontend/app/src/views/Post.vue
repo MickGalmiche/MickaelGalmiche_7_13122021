@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import PostItem from '@/components/PostItem.vue'
 import CommentItem from '@/components/CommentItem.vue'
@@ -84,6 +84,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'fetchAccessToken',
+      'doLogout'
+    ]),
     fetchPost() {
       axios
         .get(`${process.env.VUE_APP_API}/post/${this.routeId}`, {
@@ -97,15 +101,26 @@ export default {
           this.comments = response.data.comment
           ))
         .catch(error => {
-          console.error(`${error.request.status} ${error.request.statusText} : ${error.response.data.error}`)
+          switch(error.response.status) {
+            case 401:
+              this.doLogout();
+              break;
+
+            case 404:
+              this.$router.push({ name: 'Home' });
+              break;
+          }
+          console.log(error)
         })
     },
     redirectAtHome() {
       this.$router.push({ name: 'Home' })
     }
   },
-  mounted() {
-      this.fetchPost();
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.fetchPost()
+    })
   }
 }
 </script>

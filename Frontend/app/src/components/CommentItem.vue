@@ -90,16 +90,33 @@ export default {
             this.calendarDate = moment(this.date).format('LLLL')
         },
         deleteComment() {
-            axios
-                .delete(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                        }
+            if (confirm('Etes-vous certain de vouloir supprimer ce commentaire ?')) {
+                axios
+                    .delete(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${this.accessToken}`
+                            }
+                        })
+                    .then(() => {
+                        this.$emit('deleteComment')
                     })
-                .then(() => {
-                    this.$emit('deleteComment')
-                })
-                .catch(error => console.error(error))
+                    .catch(error => {
+                        switch(error.response.status) {
+                            case 400:
+                                alert('Le commentaire n\'a pas été supprimé');
+                                break;
+
+                            case 401:
+                                this.doLogout();
+                                break;
+
+                            case 403:
+                                alert('Vous n\'avez pas la permission de supprimer ce commentaire')
+                                break;
+                        }
+                        console.error(error)
+                    })
+            }
         },
         openUpdateForm() {
             this.currentlyUpdating = true
@@ -121,7 +138,22 @@ export default {
                 this.$emit('updateComment')
                 this.closeUpdateForm()
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                switch(error.response.status) {
+                    case 400:
+                        alert('Le commentaire n\'a pas été mis à jour')
+                        break;
+
+                    case 401:
+                        this.doLogout();
+                        break;
+
+                    case 403:
+                        alert('Vous n\'avez pas la permission de mettre à jour ce commentaire')
+                        break;
+                }
+                console.log(error)
+            })
         }
     },
   mounted() {

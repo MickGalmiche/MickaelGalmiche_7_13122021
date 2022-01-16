@@ -76,7 +76,7 @@ export default {
                                 break;
                             
                             case 401:
-                                alert('Vous n\'avez pas la permission de supprimer ce compte')
+                                this.doLogout();
                                 break;
 
                             case 400:

@@ -64,109 +64,141 @@ import IconDate from './icons/IconDate.vue'
 import IconEdit from './icons/IconEdit.vue'
 
 export default {
-  name: 'PostItem',
-  components: {
-      IconTrash,
-      IconComment,
-      IconAuthor,
-      IconDate,
-      IconEdit
-  },
-  data() {
-      return {
-          relativeDate: '',
-          calendarDate: '',
-          currentlyUpdating: false,
-          updatingTitle: '',
-          updatingContent: ''
-      }
-  },
-  computed: {
-    ...mapState([
-      'accessToken',
-      'userId',
-      'userRole'
-    ]),
-    isAuthor() {
-      return this.userId == this.authorId ? true : false;
+    name: 'PostItem',
+    components: {
+        IconTrash,
+        IconComment,
+        IconAuthor,
+        IconDate,
+        IconEdit
     },
-    isAdmin() {
-      return this.userRole == 'ADMIN' ? true : false;
-    }
-  },
-  props: {
-      postId: {
-          type: Number
-      },
-      title: {
-          type: String
-      },
-      date: {},
-      content: {
-          type: String
-      },
-      firstname: {
-          type: String
-      },
-      authorId: {
-          type: Number
-      },
-      lastname: {
-          type: String
-      },
-      getLink: {
-          type: Boolean
-      },
-      commentcount: {
-          type: Number
-      }
-  },
-  methods: {
-      getDate() {
-          moment.locale("fr");
-          this.relativeDate = moment(this.date).fromNow()
-          this.calendarDate = moment(this.date).format('LLLL')
-      },
-      deletePost() {
-        axios
-          .delete(`${process.env.VUE_APP_API}/post/${this.postId}`, {
-            headers: {
-              'Authorization': `Bearer ${this.accessToken}`
-              }
+    data() {
+        return {
+            relativeDate: '',
+            calendarDate: '',
+            currentlyUpdating: false,
+            updatingTitle: '',
+            updatingContent: ''
+        }
+    },
+    computed: {
+        ...mapState([
+            'accessToken',
+            'userId',
+            'userRole'
+        ]),
+        isAuthor() {
+            return this.userId == this.authorId ? true : false;
+        },
+        isAdmin() {
+            return this.userRole == 'ADMIN' ? true : false;
+        }
+    },
+    props: {
+        postId: {
+            type: Number
+        },
+        title: {
+            type: String
+        },
+        date: {},
+        content: {
+            type: String
+        },
+        firstname: {
+            type: String
+        },
+        authorId: {
+            type: Number
+        },
+        lastname: {
+            type: String
+        },
+        getLink: {
+            type: Boolean
+        },
+        commentcount: {
+            type: Number
+        }
+    },
+    methods: {
+        getDate() {
+            moment.locale("fr");
+            this.relativeDate = moment(this.date).fromNow()
+            this.calendarDate = moment(this.date).format('LLLL')
+        },
+        deletePost() {
+            if (confirm('Etes-vous certain de vouloir supprimer ce post ?')) {
+                axios
+                    .delete(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${this.accessToken}`
+                        }
+                    })
+                    .then(() => {
+                        this.$emit('deletePost')
+                    })
+                    .catch(error => {
+                        switch(error.response.status) {
+                            case 400:
+                                alert('Le post n\'a pas été supprimé');
+                                break;
+
+                            case 401:
+                                this.doLogout();
+                                break;
+
+                            case 403:
+                                alert('Vous n\'avez pas la permission de supprimer ce post')
+                                break;
+                        }
+                        console.error(error)
+                    })
+            }
+        },
+        openUpdateForm() {
+            this.currentlyUpdating = true
+            this.updatingTitle = this.title
+            this.updatingContent = this.content
+        },
+        closeUpdateForm() {
+            this.currentlyUpdating = false
+        },
+        updatePost() {
+            axios
+            .put(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+                title: this.updatingTitle,
+                content: this.updatingContent
+                }, {  
+                headers: {
+                    'Authorization': `Bearer ${this.accessToken}`
+                }
             })
-          .then(() => {
-            this.$emit('deletePost')
-          })
-          .catch(error => console.error(error))
-      },
-      openUpdateForm() {
-          this.currentlyUpdating = true
-          this.updatingTitle = this.title
-          this.updatingContent = this.content
-      },
-      closeUpdateForm() {
-          this.currentlyUpdating = false
-      },
-      updatePost() {
-          axios
-          .put(`${process.env.VUE_APP_API}/post/${this.postId}`, {
-              title: this.updatingTitle,
-              content: this.updatingContent
-              }, {  
-              headers: {
-                  'Authorization': `Bearer ${this.accessToken}`
-              }
-          })
-          .then(() => {
-              this.$emit('updatePost')
-              this.closeUpdateForm()
-          })
-          .catch(error => console.log(error))
-      }
-  },
-  mounted() {
-      this.getDate()
-  }
+            .then(() => {
+                this.$emit('updatePost')
+                this.closeUpdateForm()
+            })
+            .catch(error => {
+                switch(error.response.status) {
+                    case 400:
+                        alert('Le post n\'a pas été mis à jour')
+                        break;
+
+                    case 401:
+                        this.doLogout();
+                        break;
+
+                    case 403:
+                        alert('Vous n\'avez pas la permission de mettre à jour ce post')
+                        break;
+                }
+                console.log(error)
+            })
+        }
+    },
+    mounted() {
+        this.getDate()
+    }
 }
 </script>
 

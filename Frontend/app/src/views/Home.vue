@@ -6,6 +6,7 @@
 
   <section class="timeline">
     <h2 class="timeline__title">Timeline</h2>
+    <div v-if="!hasPost">Aucun article</div>
     <PostItem
       class="timeline__item"
       v-for="post in posts"
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
 import PostItem from '@/components/PostItem.vue'
 import CreatePost from '@/components/CreatePost.vue'
@@ -46,9 +47,16 @@ export default {
       'accessToken',
       'userId',
       'userRole'
-    ])
+    ]),
+    hasPost() {
+      return this.posts.lenght == 0 ? false : true;
+    } 
   },
   methods: {
+    ...mapActions([
+      'fetchAccessToken',
+      'doLogout'
+    ]),
     fetchPosts() {
       axios
         .get(`${process.env.VUE_APP_API}/post`, {
@@ -57,11 +65,24 @@ export default {
           }
         })
         .then(response => (this.posts = response.data))
-        .catch(error => console.error(error))
+        .catch(error => {
+          console.log(error)
+          switch(error.response.status) {
+            case 401:
+              this.doLogout();
+              break;
+
+            case 404:
+              this.$router.push({ name: 'Home' });
+              break;
+          }
+        })
     }
   },
-  mounted() {
-    this.fetchPosts()
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.fetchPosts()
+    })
   }
 }
 </script>
