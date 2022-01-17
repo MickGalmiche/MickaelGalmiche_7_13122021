@@ -6,11 +6,12 @@ import AddPost from '../views/AddPost.vue'
 const routes = [
   {
     path: '/',
+    alias: '/home',
     name: 'Home',
     component: Home
   },
   {
-    path: '/post/:id',
+    path: '/post/:id(\\d+)+',
     name: 'Post',
     component: Post
   },
@@ -26,6 +27,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    redirect: { name: 'Home' }
   }
 ]
 
