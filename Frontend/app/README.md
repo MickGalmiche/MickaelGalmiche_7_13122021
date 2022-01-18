@@ -1,24 +1,8 @@
-# app
+# Groupomania - Frontend
 
-## Project setup
-```
-npm install
-```
+## Installation
+- Run the `npm install` command in the **Frontend/app** folder
+- Create a *.env* file containing the **VUE_APP_API** variable (API URL from the Backend)
+- Start the server with the command `npm run serve`
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- You can also start the server (and manage the Vue project) using the Vue graphical interface with the command `vue ui`
