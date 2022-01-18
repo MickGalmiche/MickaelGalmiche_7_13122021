@@ -24,6 +24,24 @@ import NavMenu from '@/components/NavMenu.vue'
 import Login from '@/components/Login.vue'
 import Signup from '@/components/Signup.vue'
 
+import { defineRule, configure } from 'vee-validate'
+import { localize, setLocale } from '@vee-validate/i18n'
+import fr from '@vee-validate/i18n/dist/locale/fr.json'
+
+/* Global Validators with VeeValidate Rules */
+import AllRules from '@vee-validate/rules';
+Object.keys(AllRules).forEach(rule => {
+  defineRule(rule, AllRules[rule]);
+});
+
+configure({
+  generateMessage: localize({
+    fr,
+  }),
+});
+
+setLocale('fr');
+
 export default {
   name: 'app',
   data() {
@@ -127,6 +145,11 @@ export default {
     &:focus-visible {
       outline: 1px solid $color-primary;
     }
+  }
+
+  .form-error {
+    font-weight: bold;
+    color: $color-primary
   }
 
 </style>

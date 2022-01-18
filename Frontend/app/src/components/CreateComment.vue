@@ -1,12 +1,23 @@
 <template>
     <article class="create-comment">
         <h3 class="create-comment__title">Poster un commentaire</h3>
-        <form class="create-comment__form comment-form" @submit.prevent="commentSubmit">
 
-            <textarea class="comment-form__item" v-model="content" rows="10" placeholder="Rédigez votre commentaire ici !" required></textarea>
+        <Form
+            class="create-comment__form comment-form"
+            @submit="commentSubmit"
+            :validation-schema="schema"
+        >
+            <Field
+                name="content"
+                label="commentaire"
+                as="textarea"
+                class="comment-form__item comment-form__textarea"
+                placeholder="Rédigez votre commentaire ici !"
+            />
+            <ErrorMessage name="content" class="form-error" />
 
-            <button class="comment-form__button" type="submit">Envoyer</button>
-        </form>
+            <button class="post-form__button" type="submit">Envoyer</button>
+        </Form>
 
     </article>
 </template>
@@ -14,11 +25,21 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
+        const schema = {
+            content: 'required|alpha_dash',
+        };
         return {
-            content: ''
+            /* content: '', */
+            schema,
         }
     },
     computed: {
@@ -34,10 +55,10 @@ export default {
         }
     },
     methods: {
-        commentSubmit() {
+        commentSubmit(values, { resetForm }) {
             axios.post(`${process.env.VUE_APP_API}/comment/`, {
                 postId: this.postId,
-                content: this.content,
+                content: values.content,
                 authorId: Number(this.userId)
             }, {
                 headers: {
@@ -45,6 +66,7 @@ export default {
                 },
             })
             .then(() => {
+                resetForm();
                 this.$emit('submitComment')
             })
             .catch(error => console.error(error))
@@ -121,5 +143,4 @@ export default {
             }
         }
     }
-
 </style>

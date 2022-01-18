@@ -1,22 +1,54 @@
 <template>
     <article class="login">
-        <form class="login__form login-form" @submit.prevent="loginSubmit">
-            <input class="login-form__item" type="email" v-model="email" placeholder="Email" required>
-            <input class="login-form__item" type="password" v-model="password" placeholder="Mot de passe" required>
+
+        <Form
+            class="login__form login-form"
+            @submit="loginSubmit"
+            :validation-schema="schema"
+        >
+            <Field 
+                name="email"
+                label="Email"
+                type="email"
+                class="login-form__item"
+                placeholder="Email"
+            />
+            <ErrorMessage name ="email" class="form-error" />
+
+            <Field 
+                name="password"
+                label="Mot de passe"
+                type="password"
+                class="login-form__item"
+                placeholder="Mot de passe"
+            />
+            <ErrorMessage name="password" class="form-error" />
+
             <button class="login-form__button" type="submit">Se connecter</button>
             <p class="login__error" v-if="loginError">{{ loginError }}</p>
-        </form>
+        </Form>
     </article>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
+        const schema = {
+            email: 'required|email',
+            password: 'required|min:6'
+        }
         return {
-            email: '',
-            password: ''
+            /* email: '',
+            password: '', */
+            schema,
         }
     },
     computed: {
@@ -30,10 +62,10 @@ export default {
         ...mapActions([
             'doLogin'
         ]),
-        loginSubmit() {
+        loginSubmit(values) {
             this.doLogin({
-                email: this.email,
-                password: this.password
+                email: values.email,
+                password: values.password
             })
         }
     }

@@ -1,12 +1,60 @@
 <template>
     <article class="signup">
-        <form class="signup__form signup-form" @submit.prevent="registerSubmit">
-            <input class="signup-form__item" type="text" v-model="lastname" placeholder="Nom" required>
-            <input class="signup-form__item" type="text" v-model="firstname" placeholder="Prénom" required>
-            <input class="signup-form__item" type="email" v-model="email" placeholder="Email" required>
-            <input class="signup-form__item" type="password" v-model="password" placeholder="Mot de passe" required>
+
+        <Form
+            class="signup__form signup-form"
+            @submit="registerSubmit"
+            :validation-schema="schema"
+        >
+
+            <Field 
+                name="lastname"
+                label="Nom"
+                type="text"
+                class="signup-form__item"
+                placeholder="Nom"
+            />
+            <ErrorMessage name="lastname" class="form-error" />
+
+            <Field 
+                name="firstname"
+                label="Prénom"
+                type="text"
+                class="signup-form__item"
+                placeholder="Prénom"
+            />
+            <ErrorMessage name="firstname" class="form-error" />
+
+            <Field 
+                name="email"
+                label="Email"
+                type="email"
+                class="signup-form__item"
+                placeholder="Email"
+            />
+            <ErrorMessage name="email" class="form-error" />
+
+            <Field 
+                name="password"
+                label="Mot de Passe"
+                type="password"
+                class="signup-form__item"
+                placeholder="Mot de passe"
+            />
+            <ErrorMessage name="password" class="form-error" />
+
+            <Field
+                name="confirmation"
+                label="Confirmation de mot de passe"
+                type="password"
+                class="signup-form__item"
+                placeholder="Confirmer le mot de passe"
+            />
+            <ErrorMessage name="confirmation" class="form-error" />
+
             <button class="signup-form__button" type="submit">S'inscrire</button>
-        </form>
+
+        </Form>
 
     </article>
 </template>
@@ -14,14 +62,28 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import axios from 'axios'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
+        const schema = {
+            lastname: 'required|alpha|max:100',
+            firstname: 'required|alpha|max:100',
+            email: 'required|email|max:100',
+            password: 'required|min:6',
+            confirmation: 'required|confirmed:@password'
+        }
         return {
-            firstname: '',
+            /* firstname: '',
             lastname: '',
             email: '',
-            password: ''
+            password: '', */
+            schema,
         }
     },
     computed: {
@@ -35,17 +97,17 @@ export default {
         ...mapActions([
             'doLogin'
         ]),
-        registerSubmit() {
+        registerSubmit(values) {
             axios.post(`${process.env.VUE_APP_API}/auth/signup`, {
-                email: this.email,
-                password: this.password,
-                firstname: this.firstname,
-                lastname: this.lastname
+                email: values.email,
+                password: values.password,
+                firstname: values.firstname,
+                lastname: values.lastname
             })
             .then(() => {
                 this.doLogin({
-                    email: this.email,
-                    password: this.password
+                    email: values.email,
+                    password: values.password
                 })
             })
         }

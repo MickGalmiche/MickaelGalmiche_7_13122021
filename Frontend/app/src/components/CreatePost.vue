@@ -1,13 +1,33 @@
 <template>
     <article class="create-post">
         <h2 class="create-post__title">Poster un message</h2>
-        <form class="create-post__form post-form" @submit.prevent="postSubmit">
 
-            <input class="post-form__item" type="text" v-model="title" placeholder="Titre" required>
-            <textarea class="post-form__item post-form__textarea" v-model="content" :rows="textareaRows" placeholder="Rédigez votre article ici !" required></textarea>
+        <Form
+            class="create-post__form post-form"
+            @submit="postSubmit"
+            :validation-schema="schema"
+        >
+
+            <Field 
+                name="title"
+                label="titre" 
+                class="post-form__item" 
+                type="text" 
+                placeholder="Titre" 
+            />
+            <ErrorMessage name="title" class="form-error" />
+
+            <Field
+                name="content"
+                label="article"
+                as="textarea"
+                class="post-form__item post-form__textarea"
+                placeholder="Rédigez votre article ici !"
+            />
+            <ErrorMessage name="content" class="form-error" />
 
             <button class="post-form__button" type="submit">Envoyer</button>
-        </form>
+        </Form>
 
     </article>
 </template>
@@ -15,12 +35,23 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage
+    },
     data() {
+        const schema = {
+            title: 'required|regex:/^([A-Z0-9]{1})([\\w\\s\\.-!?]*)$/',
+            content: 'required|alpha_dash',
+        };
         return {
-            title: '',
-            content: ''
+            /* title: '',
+            content: '', */
+            schema,
         }
     },
     computed: {
@@ -39,10 +70,10 @@ export default {
         }
     },
     methods: {
-        postSubmit() {
+        postSubmit(values, { resetForm }) {
             axios.post(`${process.env.VUE_APP_API}/post/`, {
-                title: this.title,
-                content: this.content,
+                title: values.title,
+                content: values.content,
                 authorId: Number(this.userId)
             }, {
                 headers: {
@@ -50,6 +81,7 @@ export default {
                 },
             })
             .then(() => {
+                resetForm();
                 this.$emit('submitPost')
             })
             .catch(error => console.error(error))
