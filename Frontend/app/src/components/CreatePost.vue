@@ -45,8 +45,14 @@ export default {
     },
     data() {
         const schema = {
-            title: 'required|regex:/^([A-Z0-9]{1})([\\w\\s\\.-!?]*)$/',
-            content: 'required|alpha_dash',
+            title: {
+                required: true,
+                regex: /^([\wÀ-ÿ\s\-,;:.'`!?]*)$/
+            },
+            content: {
+                required: true,
+                regex: /^([\wÀ-ÿ\s\-,;:.'`!?]*)$/
+            }
         };
         return {
             /* title: '',

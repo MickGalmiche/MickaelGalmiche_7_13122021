@@ -35,7 +35,10 @@ export default {
     },
     data() {
         const schema = {
-            content: 'required|alpha_dash',
+            content: {
+                required: true,
+                regex: /^([\wÀ-ÿ\s\-,;:.'`!?]*)$/
+            }
         };
         return {
             /* content: '', */
