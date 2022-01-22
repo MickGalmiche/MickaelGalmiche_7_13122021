@@ -98,7 +98,7 @@ export default {
             'doLogin'
         ]),
         registerSubmit(values) {
-            axios.post(`${process.env.VUE_APP_API}/auth/signup`, {
+            axios.post(`${process.env.VUE_APP_API}/api/auth/signup`, {
                 email: values.email,
                 password: values.password,
                 firstname: values.firstname,

@@ -77,7 +77,7 @@ export default {
     },
     methods: {
         postSubmit(values, { resetForm }) {
-            axios.post(`${process.env.VUE_APP_API}/post/`, {
+            axios.post(`${process.env.VUE_APP_API}/api/post/`, {
                 title: values.title,
                 content: values.content,
                 authorId: Number(this.userId)

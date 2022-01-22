@@ -59,7 +59,7 @@ export default {
     ]),
     fetchPosts() {
       axios
-        .get(`${process.env.VUE_APP_API}/post`, {
+        .get(`${process.env.VUE_APP_API}/api/post`, {
           headers: {
             'Authorization': `Bearer ${this.accessToken}`
           }

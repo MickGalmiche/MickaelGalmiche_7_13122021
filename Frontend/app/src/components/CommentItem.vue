@@ -92,7 +92,7 @@ export default {
         deleteComment() {
             if (confirm('Etes-vous certain de vouloir supprimer ce commentaire ?')) {
                 axios
-                    .delete(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
+                    .delete(`${process.env.VUE_APP_API}/api/comment/${this.commentId}`, {
                         headers: {
                             'Authorization': `Bearer ${this.accessToken}`
                             }
@@ -127,7 +127,7 @@ export default {
         },
         updateComment() {
             axios
-            .put(`${process.env.VUE_APP_API}/comment/${this.commentId}`, {
+            .put(`${process.env.VUE_APP_API}/api/comment/${this.commentId}`, {
                 content: this.updatingContent
                 }, {  
                 headers: {

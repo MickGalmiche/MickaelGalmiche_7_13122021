@@ -29,7 +29,7 @@ export default createStore({
     doLogin({commit}, loginData) {
       commit('loginStart');
 
-      axios.post(`${process.env.VUE_APP_API}/auth/login`, {
+      axios.post(`${process.env.VUE_APP_API}/api/auth/login`, {
         ...loginData
       })
       .then(response => {

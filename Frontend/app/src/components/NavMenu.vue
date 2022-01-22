@@ -59,7 +59,7 @@ export default {
         deleteAccount() {
             if (confirm('Etes-vous certain de vouloir supprimer votre compte ?')) {
                 axios
-                    .delete(`${process.env.VUE_APP_API}/auth/delete/${this.userId}`, {
+                    .delete(`${process.env.VUE_APP_API}/api/auth/delete/${this.userId}`, {
                         headers: {
                             'Authorization': `Bearer ${this.accessToken}`
                         }

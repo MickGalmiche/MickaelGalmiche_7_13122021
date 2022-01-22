@@ -130,7 +130,7 @@ export default {
         deletePost() {
             if (confirm('Etes-vous certain de vouloir supprimer ce post ?')) {
                 axios
-                    .delete(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+                    .delete(`${process.env.VUE_APP_API}/api/post/${this.postId}`, {
                         headers: {
                             'Authorization': `Bearer ${this.accessToken}`
                         }
@@ -166,7 +166,7 @@ export default {
         },
         updatePost() {
             axios
-            .put(`${process.env.VUE_APP_API}/post/${this.postId}`, {
+            .put(`${process.env.VUE_APP_API}/api/post/${this.postId}`, {
                 title: this.updatingTitle,
                 content: this.updatingContent
                 }, {  

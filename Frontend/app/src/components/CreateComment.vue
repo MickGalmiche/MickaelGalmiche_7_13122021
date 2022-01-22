@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         commentSubmit(values, { resetForm }) {
-            axios.post(`${process.env.VUE_APP_API}/comment/`, {
+            axios.post(`${process.env.VUE_APP_API}/api/comment/`, {
                 postId: this.postId,
                 content: values.content,
                 authorId: Number(this.userId)

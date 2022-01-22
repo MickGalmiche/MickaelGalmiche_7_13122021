@@ -13,14 +13,14 @@ Septième et dernier projet du parcours **développeur web**, dont l'objectif es
 
 ### [Partie Backend](/Backend/README.md) : Lancer l'API
 - Exécuter la commande `npm install dans le dossier **Backend**
-- Créer un fichier *.env* contenant les variables **DATABASE_URL** (chaîne permettant la connexion à la base de données) et **TOKEN_KEY** (chaîne pour l'encodage du token). Une modification du port peut également être ajoutée avec la variable **PORT**.
+- Créer un fichier *.env* contenant les variables **DATABASE_URL** (chaîne permettant la connexion à la base de données) et **TOKEN_KEY** (chaîne pour l'encodage du token). Une modification du port peut également être ajoutée avec la variable **PORT** (*3000* par défaut).
 - Modifier le fournisseur de la base de données du fichier Schema.prisma si nécessaire (*mysql* par défaut)
 - Appliquer le schéma à la base de données avec la commande `npx prisma migrate dev`.
 - Démarrer le serveur avec la commande `npm start`.
 
 ### [Partie Frontend](/Frontend/app/README.md) : Lancer l'application Vue
 - Exécuter la commande `npm install` dans le dossier **Frontend/app**.
-- Créer un fichier *.env* contenant la variable **VUE_APP_API** (url de l'API du Backend)
+- Créer un fichier *.env* contenant la variable **VUE_APP_API** (correspond à l'url de l'API du Backend)
 - Démarrer le serveur avec la commande `npm run serve`.
 
 ## Cahiers des charges
