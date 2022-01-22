@@ -8,7 +8,8 @@
         </div>
 
         <div class="comment-card__content comment-card__content--update content-update" v-if="currentlyUpdating">
-            <textarea class="content-update__textarea" v-model="updatingContent" rows="4" required></textarea>
+            <label for="contentCommentUpdate">Commentaire à mettre à jour:</label>
+            <textarea id="contentCommentUpdate" class="content-update__textarea" v-model="updatingContent" rows="4" required></textarea>
             <div class="content-update__buttons update-buttons">
                 <button class="update-buttons__item" @click.prevent="updateComment">Confirmer</button>
                 <button class="update-buttons__item" @click.prevent="closeUpdateForm">Annuler</button>
@@ -17,10 +18,10 @@
 
         <p v-else class="comment-card__content">{{ content }}</p>
         <div class="comment-card__buttons" v-if="isAdmin || isAuthor">
-            <button class="button-edit" @click.prevent="openUpdateForm">
+            <button title="Éditer le commentaire" class="button-edit" @click.prevent="openUpdateForm">
                 <IconEdit />
             </button>
-            <button class="button-delete" @click.prevent="deleteComment">
+            <button title="Supprimer le commentaire" class="button-delete" @click.prevent="deleteComment">
                 <IconTrash />
             </button>
         </div>

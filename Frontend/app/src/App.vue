@@ -149,7 +149,7 @@ export default {
 
   .form-error {
     font-weight: bold;
-    color: $color-primary
+    color: $color-primary-darken;
   }
 
 </style>

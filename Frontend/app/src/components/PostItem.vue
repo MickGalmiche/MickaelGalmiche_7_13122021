@@ -15,7 +15,7 @@
                 <IconComment />
             </div>
             <div class="post-card__buttons" v-if="isAdmin || isAuthor">
-                <button class="button-delete" @click.prevent="deletePost">
+                <button title="Supprimer le post" class="button-delete" @click.prevent="deletePost">
                     <IconTrash />
                 </button>
             </div>
@@ -25,6 +25,7 @@
 
     <article v-else class="post-card">
         <h2 v-if="!currentlyUpdating" class="post-card__title">{{ title }}</h2>
+        <h2 v-else class="post-card__title">Mise à jour du post</h2>
         <div class="post-card__caption">
             <IconAuthor />
             <span>{{ firstname }} {{ lastname }}</span>
@@ -33,8 +34,10 @@
         </div>
 
         <div class="post-card__content post-card__content--update post-update" v-if="currentlyUpdating">
-            <input class="post-update__item" type="text" v-model="updatingTitle" required>
-            <textarea class="post-update__item post-update__item--textarea" v-model="updatingContent" rows="4" required></textarea>
+            <label for="titlePostUpdate">Titre</label>
+            <input id="titlePostUpdate" class="post-update__item" type="text" v-model="updatingTitle" required>
+            <label for="contentPostUpdate">Contenu</label>
+            <textarea id="contentPostUpdate" class="post-update__item post-update__item--textarea" v-model="updatingContent" rows="4" required></textarea>
             <div class="post-update__buttons post-buttons">
                 <button class="post-buttons__item" @click.prevent="updatePost">Confirmer</button>
                 <button class="post-buttons__item" @click.prevent="closeUpdateForm">Annuler</button>
@@ -43,10 +46,10 @@
 
         <p v-else class="post-card__content">{{ content }}</p>
         <div class="post-card__buttons" v-if="isAdmin || isAuthor">
-          <button class="button-edit" @click.prevent="openUpdateForm">
+          <button title="Éditer le post" class="button-edit" @click.prevent="openUpdateForm">
               <IconEdit />
           </button>
-          <button class="button-delete" @click.prevent="deletePost">
+          <button title="Supprimer le post" class="button-delete" @click.prevent="deletePost">
               <IconTrash />
           </button>
         </div>
