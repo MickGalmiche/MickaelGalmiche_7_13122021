@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Post from '../views/Post.vue'
 import AddPost from '../views/AddPost.vue'
+import Profile from '../views/Profile.vue'
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     path: '/post/add',
     name: 'AddPost',
     component: AddPost
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '/about',

@@ -14,14 +14,9 @@
                 </li>
 
                 <li class="nav__item nav-item">
-                    <a title="Se déconnecter" class="nav-item__link" @click.prevent="logout">
-                        <IconLogout />
-                    </a>
-                </li>
-                <li class="nav__item nav-item">
-                    <a title="Supprimer son compte" class="nav-item__link" @click.prevent="deleteAccount">
-                        <IconDelUser />
-                    </a>
+                    <router-link class="nav-item__link" :to="{ name: 'Profile'}">
+                        <IconProfile />
+                    </router-link>
                 </li>
             </ul>
         </nav>
@@ -29,18 +24,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-import axios from 'axios'
+import { mapState } from 'vuex'
 import IconAdd from './icons/IconAdd.vue'
-import IconDelUser from './icons/IconDelUser.vue'
-import IconLogout from './icons/IconLogout.vue'
+import IconProfile from './icons/IconProfile.vue'
 
 export default {
     name: 'navMenu',
     components: {
         IconAdd,
-        IconDelUser,
-        IconLogout
+        IconProfile
     },
     computed: {
         ...mapState([
@@ -48,44 +40,6 @@ export default {
           'userId',
           'userRole'
         ])
-    },
-    methods: {
-        ...mapActions([
-            'doLogout'
-        ]),
-        logout() {
-            this.doLogout()
-        },
-        deleteAccount() {
-            if (confirm('Etes-vous certain de vouloir supprimer votre compte ?')) {
-                axios
-                    .delete(`${process.env.VUE_APP_API}/api/auth/delete/${this.userId}`, {
-                        headers: {
-                            'Authorization': `Bearer ${this.accessToken}`
-                        }
-                    })
-                    .then(() => {
-                        alert('Votre compte a bien été supprimé !')
-                        this.doLogout()
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        switch (error.response.status) {
-                            case 403:
-                                alert('Vous n\'avez pas la permission de supprimer ce compte')
-                                break;
-                            
-                            case 401:
-                                this.doLogout();
-                                break;
-
-                            case 400:
-                                alert('Nous n\'avons pu procéder à la suppression de ce compte')
-                                break;
-                        }
-                    })
-            }
-        }
     }
 }
 </script>
