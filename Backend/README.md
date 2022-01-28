@@ -12,9 +12,11 @@
 ### User
 |   |Access point|Request Body|Response|
 |---|---|---|---|
-|POST|/api/auth/signup|{ email: string, firstname: string, lastname: string, password: string}|{ message: string }|
+|POST|/api/auth/signup|{ email: string, firstname: string, lastname: string, password: string }|{ message: string }|
 |POST|/api/auth/login|{ email: string, password: string }|{ userId: string, token: string, userRole: string }|
 |DELETE|/api/auth/delete/:id| - |{ message: string}|
+|GET|/api/auth/profile/:id| - |Single User Profile|
+|PUT|/api/auth/profile/:id|{ email: string, firstname: string, lastname: string, password: string }|{ message: string }|
 
 ### Post
 |   |Access point|Request Body|Response|
