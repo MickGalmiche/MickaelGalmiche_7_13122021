@@ -10,6 +10,15 @@
                 <span v-bind:title="calendarDate">{{ relativeDate }}</span>   
             </div>
             <p class="post-card__content">{{ content }}</p>
+            <div class="post-card__rating">
+                <button class="button-rating" :class="hasUserLike ? 'button-rating--color' : ''">
+                    <IconLike /> {{ likeCount }}
+                </button>
+
+                <button class="button-rating" :class="hasUserDislike ? 'button-rating--color' : ''">
+                    <IconDislike /> {{ dislikeCount }}
+                </button>
+            </div>
             <div class="post-card__commentcount">
                 <span>{{ commentcount }}</span>
                 <IconComment />

@@ -8,6 +8,8 @@ const prisma = new PrismaClient({
 });
 
 exports.getAllPost = async (req, res) => {
+    const { userId } = req.token
+    
     try {
         const posts = await prisma.post.findMany({
             orderBy: {
@@ -25,10 +27,66 @@ exports.getAllPost = async (req, res) => {
                     select: {
                         comment: true
                     }
+                },
+                rating: {
+                    select: {
+                        id_rating: true,
+                        rating: true,
+                        user: {
+                            select: {
+                                id_user: true,
+                                firstname: true,
+                                lastname: true,
+                                user_password: false
+                            }
+                        }
+                    }
                 }
             }
         })
-        return res.status(200).json(posts);
+
+
+        let postsList = []
+
+        posts.forEach(post => {
+
+            let likeArray = []
+            let dislikeArray = []
+            const ratings = post.rating;
+
+            ratings.forEach(element => {
+                if (element.rating === 'LIKE') {
+                    likeArray.push(element)
+                } else if (element.rating === 'DISLIKE') {
+                    dislikeArray.push(element)
+                }
+            });
+
+            const userRating = ratings.find(element => element.user.id_user == userId);
+            const likeCount = likeArray.length
+            const dislikeCount = dislikeArray.length
+
+            const response = {
+                post: {
+                    id_post: post.id_post,
+                    date: post.date,
+                    title: post.title,
+                    content: post.content,
+                },
+                author: post.user,
+                comment: {
+                    count: post._count.comment,
+                },
+                rating: {
+                    likeCount,
+                    dislikeCount,
+                    userRating
+                }
+            }
+            postsList.push(response)
+        })
+
+        return res.status(200).json(postsList);
     } catch (error) {
         return res.status(404).json({ error: 'Posts not found in database' })
     }
