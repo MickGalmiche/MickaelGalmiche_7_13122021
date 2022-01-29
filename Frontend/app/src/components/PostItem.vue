@@ -45,6 +45,19 @@
         </div>
 
         <p v-else class="post-card__content">{{ content }}</p>
+        <div class="post-card__rating">
+        
+            <button class="button-rating" :class="hasUserLike ? 'button-rating--color' : ''">
+                <IconLike /> {{ likeCount }}
+            </button>
+            <button class="button-rating" :class="hasUserDislike ? 'button-rating--color' : ''">
+                <IconDislike /> {{ dislikeCount }}
+            </button>
+        </div>
+        <div class="post-card__commentcount">
+            <span>{{ commentcount }}</span>
+            <IconComment />
+        </div>
         <div class="post-card__buttons" v-if="isAdmin || isAuthor">
           <button title="Éditer le post" class="button-edit" @click.prevent="openUpdateForm">
               <IconEdit />
@@ -65,6 +78,8 @@ import IconComment from './icons/IconComment.vue'
 import IconAuthor from './icons/IconAuthor.vue'
 import IconDate from './icons/IconDate.vue'
 import IconEdit from './icons/IconEdit.vue'
+import IconLike from './icons/IconLike.vue'
+import IconDislike from './icons/IconDislike.vue'
 
 export default {
     name: 'PostItem',
@@ -73,7 +88,9 @@ export default {
         IconComment,
         IconAuthor,
         IconDate,
-        IconEdit
+        IconEdit,
+        IconLike,
+        IconDislike
     },
     data() {
         return {
@@ -81,7 +98,7 @@ export default {
             calendarDate: '',
             currentlyUpdating: false,
             updatingTitle: '',
-            updatingContent: ''
+            updatingContent: '',
         }
     },
     computed: {
@@ -95,6 +112,12 @@ export default {
         },
         isAdmin() {
             return this.userRole == 'ADMIN' ? true : false;
+        },
+        hasUserLike() {
+            return (this.userRating && this.userRating.rating == 'LIKE') ? true : false;
+        },
+        hasUserDislike() {
+            return (this.userRating && this.userRating.rating == 'DISLIKE') ? true : false;
         }
     },
     props: {
@@ -122,6 +145,15 @@ export default {
         },
         commentcount: {
             type: Number
+        },
+        likeCount: {
+            type: Number
+        },
+        dislikeCount: {
+            type: Number
+        },
+        userRating: {
+            type: Object
         }
     },
     methods: {
@@ -233,17 +265,17 @@ export default {
                 "postCaption postButtons"
                 "postTitle postTitle"
                 "postContent postContent"
-                ". postComCount";
+                "postRating postComCount";
             grid-template-columns: 4fr 1fr;
         }
 
         display: grid;
         grid-template-areas:
-            "postCaption postCaption"
-            "postTitle postTitle"
-            "postContent postContent"
-            "postButtons postComCount";
-        grid-template-columns: repeat(2, 1fr);
+            "postCaption postCaption postCaption"
+            "postTitle postTitle postTitle"
+            "postContent postContent postContent"
+            "postButtons postRating postComCount";
+        grid-template-columns: repeat(3, 1fr);
 
         &__title {
             grid-area: postTitle;
@@ -301,6 +333,16 @@ export default {
                 justify-self: end;
             }
         }
+        &__rating {
+            grid-area: postRating;
+            justify-self: center;
+            display: flex;
+            align-items: center;
+
+            @include for-tablet {
+                justify-self: start;
+            }
+        }
     }
 
     .post-link {
@@ -324,6 +366,24 @@ export default {
         }
         &:focus-visible {
             outline: none;
+        }
+    }
+
+    .button-rating {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: $bg-color-tertiary;
+        margin: map-get($margin , small);
+        display: flex;
+        align-items: center;
+
+        svg {
+            width: 1.5em;
+            height: 1.5em;
+        }
+        &--color {
+            color: $color-primary;
         }
     }
 

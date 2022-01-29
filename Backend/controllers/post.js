@@ -58,6 +58,7 @@ exports.createPost = async (req, res) => {
 
 exports.getOnePost = async (req, res) => {
     const { id } = req.params
+    const { userId } = req.token
 
     try {
         const post = await prisma.post.findUnique({
@@ -91,10 +92,59 @@ exports.getOnePost = async (req, res) => {
                             }
                         }
                     }
+                },
+                rating: {
+                    select: {
+                        id_rating: true,
+                        rating: true,
+                        user: {
+                            select: {
+                                id_user: true,
+                                firstname: true,
+                                lastname: true,
+                                user_password: false
+                            }
+                        }
+                    }
                 }
             }
         })
-        return res.status(200).json(post);
+        let likeArray = []
+        let dislikeArray = []
+        const ratings = post.rating;
+
+        ratings.forEach(element => {
+            if (element.rating === 'LIKE') {
+                likeArray.push(element)
+            } else if (element.rating === 'DISLIKE') {
+                dislikeArray.push(element)
+            }
+        });
+
+        const userRating = ratings.find(element => element.user.id_user == userId);
+        const likeCount = likeArray.length
+        const dislikeCount = dislikeArray.length
+        
+        const response = {
+            post: {
+                id_post: post.id_post,
+                date: post.date,
+                title: post.title,
+                content: post.content,
+            },
+            author: post.user,
+            comment: {
+                count: post._count.comment,
+                comments: post.comment
+            },
+            rating: {
+                likeCount,
+                dislikeCount,
+                userRating
+            }
+        }
+
+        return res.status(200).json(response);
     } catch (error) {
         return res.status(404).json({ error: 'Post not found in database' })
     }

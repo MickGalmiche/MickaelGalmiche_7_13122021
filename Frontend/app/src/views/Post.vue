@@ -10,6 +10,10 @@
     :authorId="user.id_user"
     :firstname="user.firstname"
     :lastname="user.lastname"
+    :commentcount="comment.count"
+    :likeCount="rating.likeCount"
+    :dislikeCount="rating.dislikeCount"
+    :userRating="rating.userRating"
     :getLink="false"
     @deletePost="redirectAtHome()"
     @updatePost="fetchPost()"
@@ -24,14 +28,14 @@
     />
 
     <CommentItem
-      v-for="comment in comments"
-      :key="comment.id_comment"
-      :date="comment.date"
-      :content="comment.content"
-      :commentId="comment.id_comment"
-      :authorId="comment.user.id_user"
-      :firstname="comment.user.firstname"
-      :lastname="comment.user.lastname"
+      v-for="element in comment.comments"
+      :key="element.id_comment"
+      :date="element.date"
+      :content="element.content"
+      :commentId="element.id_comment"
+      :authorId="element.user.id_user"
+      :firstname="element.user.firstname"
+      :lastname="element.user.lastname"
       @deleteComment="fetchPost()"
       @updateComment="fetchPost()"
     /> 
@@ -67,7 +71,8 @@ export default {
     return {
       post: {},
       user: {},
-      comments: []
+      comment: {},
+      rating: {},
     }
   },
   computed: {
@@ -80,7 +85,7 @@ export default {
       return this.$route.params.id
     },
     hasComment() {
-        return this.comments.length == 0 ? false : true;
+        return this.comment.count == 0 ? false : true;
     }
   },
   methods: {
@@ -96,9 +101,10 @@ export default {
             }
           })
         .then(response => (
-          this.post = response.data,
-          this.user = response.data.user,
-          this.comments = response.data.comment
+          this.post = response.data.post,
+          this.user = response.data.author,
+          this.comment = response.data.comment,
+          this.rating = response.data.rating
           ))
         .catch(error => {
           switch(error.response.status) {

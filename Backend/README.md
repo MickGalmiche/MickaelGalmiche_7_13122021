@@ -23,7 +23,7 @@
 |---|---|---|---|
 |GET|/api/post| - |Array of Posts|
 |POST|/api/post|{ title: string, content: string, authorId: string }|{ message: string }|
-|GET|/api/post/:id| - |Single post with array of comments|
+|GET|/api/post/:id| - |Single post with author/comment/rating objects|
 |PUT|/api/post/:id|{ title: string, content: string }|{ message: string }|
 |DELETE|/api/post/:id| - |{ message: string }|
 
@@ -35,3 +35,8 @@
 |GET|/api/comment/:id| - |Single comment|
 |PUT|/api/comment/:id|{ content: string }|{ message: string }|
 |DELETE|/api/comment/:id| - |{ message: string }|
+
+### Rating
+|   |Access point|Request Body|Response|
+|---|---|---|---|
+|GET|/api/rating/post/:id| - |Array of Ratings|
