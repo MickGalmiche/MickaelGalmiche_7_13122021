@@ -22,14 +22,27 @@ model comment {
 
 model post {
   id_post Int       @id @default(autoincrement())
-  date    DateTime  @db.Timestamp @default(now())
+  date    DateTime  @db.Timestamp(0) @default(now())
   content String    @db.Text
   title   String    @db.VarChar(100)
   fk_user Int
   user    user      @relation(fields: [fk_user], references: [id_user], onDelete: Cascade, map: "post_FK")
   comment comment[]
+  rating   rating[]
 
   @@index([fk_user], map: "post_FK")
+}
+
+model rating {
+  id_rating Int     @id @default(autoincrement())
+  rating    Rating  @default(NULL)
+  fk_user   Int
+  fk_post   Int
+  user      user    @relation(fields: [fk_user], references: [id_user], onDelete: Cascade, map: "rating_FK" )
+  post      post    @relation(fields: [fk_post], references: [id_post], onDelete: Cascade, map: "rating_FK_1")
+
+  @@index([fk_user], map: "rating_FK")
+  @@index([fk_post], map: "rating_FK_1")
 }
 
 model user {
@@ -40,10 +53,17 @@ model user {
   lastname      String    @db.VarChar(100)
   comment       comment[]
   post          post[]
+  rating        rating[]
   role          Role      @default(USER)
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum Rating {
+  LIKE
+  DISLIKE
+  NULL
 }
