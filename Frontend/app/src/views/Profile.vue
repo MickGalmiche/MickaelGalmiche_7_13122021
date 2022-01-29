@@ -26,22 +26,22 @@
             >
 
                 <Field
-                    name="firstname"
+                    name="lastname"
                     label="Nom"
                     type="text"
                     class="profile-form__item"
                     placeholder="Nom"
                 />
-                <ErrorMessage name="firstname" class="form-error" />
+                <ErrorMessage name="lastname" class="form-error" />
 
                 <Field
-                    name="lastname"
+                    name="firstname"
                     label="Prénom"
                     type="text"
                     class="profile-form__item"
                     placeholder="Prénom"
                 />
-                <ErrorMessage name="lastname" class="form-error" />
+                <ErrorMessage name="firstname" class="form-error" />
 
                 <Field
                     name="email"
@@ -68,7 +68,7 @@
         </article>
         <article v-else class="profile__content">
             <h2 class="profile__title">Mon profil</h2>
-            <p class="profile__name"><IconProfile /> {{ profile.firstname }} {{ profile.lastname }}</p>
+            <p class="profile__name"><IconProfile /> {{ profile.lastname }} {{ profile.firstname }}</p>
             <p class="profile__email"><IconMail /> {{ profile.email }}</p>
         </article>
     </section>
